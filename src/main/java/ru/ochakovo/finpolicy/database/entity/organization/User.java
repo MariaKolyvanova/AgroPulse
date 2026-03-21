@@ -1,9 +1,7 @@
-package ru.ochakovo.finpolicy.database.entity.user;
+package ru.ochakovo.finpolicy.database.entity.organization;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.envers.Audited;
-import org.hibernate.envers.RelationTargetAuditMode;
 import ru.ochakovo.finpolicy.database.entity.BaseEntity;
 
 @Data
@@ -13,7 +11,6 @@ import ru.ochakovo.finpolicy.database.entity.BaseEntity;
 @Builder
 @Entity
 @Table(name = "users")
-@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 public class User extends BaseEntity {
 
     @Id

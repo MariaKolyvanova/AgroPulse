@@ -1,4 +1,4 @@
-package ru.ochakovo.finpolicy.database.entity.report;
+package ru.ochakovo.finpolicy.database.entity.data;
 
 import jakarta.persistence.*;
 import lombok.*;

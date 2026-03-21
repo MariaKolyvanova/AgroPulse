@@ -1,4 +1,4 @@
-package ru.ochakovo.finpolicy.database.entity.user;
+package ru.ochakovo.finpolicy.database.entity.organization;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

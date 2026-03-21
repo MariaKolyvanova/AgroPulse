@@ -13,6 +13,7 @@ import java.time.Instant;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
+
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private Instant createdAt;

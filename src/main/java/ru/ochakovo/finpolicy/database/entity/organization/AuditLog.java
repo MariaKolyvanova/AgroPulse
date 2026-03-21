@@ -1,8 +1,8 @@
-package ru.ochakovo.finpolicy.database.entity;
+package ru.ochakovo.finpolicy.database.entity.organization;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ru.ochakovo.finpolicy.database.entity.user.User;
+import ru.ochakovo.finpolicy.database.entity.BaseEntity;
 
 @Getter
 @Setter
@@ -11,7 +11,7 @@ import ru.ochakovo.finpolicy.database.entity.user.User;
 @Builder
 @Entity
 @Table(name = "audit_logs")
-public class AuditLog extends BaseEntity{
+public class AuditLog extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,4 +1,4 @@
-package ru.ochakovo.finpolicy.database.entity.report;
+package ru.ochakovo.finpolicy.database.entity.analytics;
 
 public enum ReportStatus {
     DRAFT, ON_VERIFICATION, APPROVED

@@ -1,4 +1,4 @@
-package ru.ochakovo.finpolicy.database.entity.report;
+package ru.ochakovo.finpolicy.database.entity.data;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -6,7 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.ochakovo.finpolicy.database.entity.BaseEntity;
-import ru.ochakovo.finpolicy.database.entity.user.Company;
+import ru.ochakovo.finpolicy.database.entity.analytics.ReportStatus;
+import ru.ochakovo.finpolicy.database.entity.organization.Company;
 
 @Data
 @NoArgsConstructor

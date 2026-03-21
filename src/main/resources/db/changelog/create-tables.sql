@@ -31,7 +31,8 @@ CREATE TABLE IF NOT EXISTS audit_logs
     action      VARCHAR(255) NOT NULL,
     entity_name VARCHAR(100),
     entity_id   BIGINT,
-    timestamp   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at  TIMESTAMP,
+    updated_at  TIMESTAMP
 );
 
 --changeset MariaKolyvanova:4
@@ -122,3 +123,4 @@ CREATE TABLE IF NOT EXISTS report_exports
     created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+

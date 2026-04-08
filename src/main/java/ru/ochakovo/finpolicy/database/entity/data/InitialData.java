@@ -14,7 +14,7 @@ import ru.ochakovo.finpolicy.database.entity.organization.Company;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "financial_reports")
+@Table(name = "initial_data")
 public class FinancialReport extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

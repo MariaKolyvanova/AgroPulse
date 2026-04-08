@@ -22,9 +22,11 @@ public class User extends BaseEntity {
 
     private String password;
 
-    private String firstname;
+    @Column(name = "first_name")
+    private String firstName;
 
-    private String lastname;
+    @Column(name = "last_name")
+    private String lastName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
@@ -32,4 +34,9 @@ public class User extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Transient
+    public String getFullName(){
+        return firstName + " " + lastName;
+    }
 }

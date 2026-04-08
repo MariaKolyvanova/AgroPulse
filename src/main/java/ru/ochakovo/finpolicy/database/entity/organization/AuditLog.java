@@ -17,16 +17,18 @@ public class AuditLog extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "company_id")
+    private Long companyId;
+
+    @Column(name = "user_id")
+    private Long userId;
+
+    @Column(name = "user_name")
+    private String userName;
 
     @Column(nullable = false)
     private String action;
 
-    @Column(name = "entity_name")
-    private String entityName;
-
-    @Column(name = "entity_id")
-    private Long entityId;
+    @Column(columnDefinition = "TEXT")
+    private String description;
 }

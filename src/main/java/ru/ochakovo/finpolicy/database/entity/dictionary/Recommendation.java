@@ -23,11 +23,8 @@ public class Recommendation extends BaseEntity {
     @Column(nullable = false)
     private String title;
 
-    @Column(name = "text_content", nullable = false, columnDefinition = "TEXT")
-    private String textContent;
-
-    @Enumerated(EnumType.STRING)
-    private Priority priority;
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String description;
 
     @Column(name = "condition_rule", columnDefinition = "TEXT")
     private String conditionRule;

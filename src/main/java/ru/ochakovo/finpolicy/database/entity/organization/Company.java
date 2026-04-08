@@ -20,4 +20,8 @@ public class Company extends BaseEntity {
 
     @Column(unique = true, nullable = false)
     private String name;
+
+    private String region;
+
+    private String industry;
 }

@@ -3,7 +3,7 @@ package ru.ochakovo.finpolicy.database.entity.analytics;
 import jakarta.persistence.*;
 import lombok.*;
 import ru.ochakovo.finpolicy.database.entity.BaseEntity;
-import ru.ochakovo.finpolicy.database.entity.data.FinancialReport;
+import ru.ochakovo.finpolicy.database.entity.data.InitialData;
 import ru.ochakovo.finpolicy.database.entity.organization.User;
 
 @Data
@@ -20,14 +20,11 @@ public class AnalysisResult extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "report_id", unique = true)
-    private FinancialReport report;
+    private InitialData report;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "analyst_id")
     private User analyst;
-
-    @Column(name = "total_score")
-    private Double totalScore;
 
     @Column(columnDefinition = "TEXT")
     private String comment;

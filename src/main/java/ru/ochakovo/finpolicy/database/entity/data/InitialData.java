@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.boot.Metadata;
 import ru.ochakovo.finpolicy.database.entity.BaseEntity;
+import ru.ochakovo.finpolicy.database.entity.FileMetadata;
 import ru.ochakovo.finpolicy.database.entity.analytics.ReportStatus;
 import ru.ochakovo.finpolicy.database.entity.organization.Company;
 
@@ -15,7 +17,7 @@ import ru.ochakovo.finpolicy.database.entity.organization.Company;
 @Builder
 @Entity
 @Table(name = "initial_data")
-public class FinancialReport extends BaseEntity {
+public class InitialData extends FileMetadata {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,8 +28,8 @@ public class FinancialReport extends BaseEntity {
     @Column(name = "type_file", nullable = false)
     private String typeFile;
 
-    @Column(name = "period_year", nullable = false)
-    private Integer periodYear;
+    @Column(name = "period", nullable = false)
+    private Integer period;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -36,4 +38,5 @@ public class FinancialReport extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
+
 }

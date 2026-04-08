@@ -19,7 +19,7 @@ public class IndicatorValue extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "report_id")
-    private FinancialReport report;
+    private InitialData report;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "indicator_id")

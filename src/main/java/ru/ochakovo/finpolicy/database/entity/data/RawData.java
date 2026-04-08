@@ -19,7 +19,7 @@ public class RawData extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "report_id")
-    private FinancialReport report;
+    private InitialData report;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "indicator_id")
@@ -31,7 +31,7 @@ public class RawData extends BaseEntity {
     @Column(name = "cell_address")
     private String cellAddress;
 
-    @Column(name = "raw_value", columnDefinition = "TEXT")
+    @Column(name = "value", columnDefinition = "TEXT")
     private String rawValue;
 
     @Builder.Default

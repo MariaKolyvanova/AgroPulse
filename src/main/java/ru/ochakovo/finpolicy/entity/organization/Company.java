@@ -10,11 +10,8 @@ import ru.ochakovo.finpolicy.entity.BaseEntity;
 @Entity
 @Getter
 @Setter
-@Table(name = "organizations")
-public class Organization extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@Table(name = "companies")
+public class Company extends BaseEntity {
 
     @Column(unique = true, nullable = false)
     private String name;

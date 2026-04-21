@@ -1,8 +1,8 @@
 --liquibase formatted sql
 
 --changeset MariaKolyvanova:1
--- Организационный слой: Организация
-CREATE TABLE IF NOT EXISTS organizations
+-- Организационный слой: Компания
+CREATE TABLE IF NOT EXISTS companies
 (
     id          BIGSERIAL PRIMARY KEY,
     name        VARCHAR(255) NOT NULL UNIQUE,
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS organizations
 CREATE TABLE IF NOT EXISTS users
 (
     id              BIGSERIAL PRIMARY KEY,
-    organization_id BIGINT REFERENCES organizations (id) ON DELETE CASCADE,
+    companies_id BIGINT REFERENCES companies (id) ON DELETE CASCADE,
     role            VARCHAR(32) NOT NULL, -- Enum: ADMINISTRATOR, OPERATOR, ANALYTIC
     email           VARCHAR(255) UNIQUE NOT NULL,
     password        VARCHAR(255) NOT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS users
 CREATE TABLE IF NOT EXISTS audit_logs
 (
     id              BIGSERIAL PRIMARY KEY,
-    organization_id BIGINT REFERENCES organizations (id) ON DELETE SET NULL,
+    companies_id BIGINT REFERENCES companies (id) ON DELETE SET NULL,
     user_id         BIGINT,
     entity_type     VARCHAR(64),
     entity_id       BIGINT,
@@ -76,16 +76,15 @@ CREATE TABLE IF NOT EXISTS recommendations
 CREATE TABLE IF NOT EXISTS reports
 (
     id              BIGSERIAL PRIMARY KEY,
-    organization_id BIGINT NOT NULL REFERENCES organizations (id) ON DELETE CASCADE,
+    companies_id BIGINT NOT NULL REFERENCES companies (id) ON DELETE CASCADE,
     period          VARCHAR(32) NOT NULL,
     document_type   VARCHAR(64) NOT NULL,
-    status          VARCHAR(32) NOT NULL, -- Enum статус
+    status          VARCHAR(32) NOT NULL,
 
-    -- Атрибуты абстрактного класса File для исходного файла
-    file_name       VARCHAR(255),
-    file_path       VARCHAR(512),
-    file_format     VARCHAR(16),
-    file_size       BIGINT,
+    name       VARCHAR(255),
+    path       VARCHAR(512),
+    format     VARCHAR(16),
+    size       BIGINT,
 
     created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP

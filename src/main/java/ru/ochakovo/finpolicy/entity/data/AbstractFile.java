@@ -1,12 +1,11 @@
 package ru.ochakovo.finpolicy.entity.data;
 
 import jakarta.persistence.MappedSuperclass;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.ochakovo.finpolicy.entity.BaseEntity;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
@@ -20,16 +19,5 @@ public abstract class AbstractFile extends BaseEntity {
 
     private Long size;
 
-    public enum ReportStatus {
-        UPLOADED,
-        VALIDATING,
-        FAILED,
-        EDITING,
-        VALIDATED,
-        READY,
-        CALCULATION,
-        COMPLETED,
-        REVIEW,
-        APPROVED
-    }
+
 }

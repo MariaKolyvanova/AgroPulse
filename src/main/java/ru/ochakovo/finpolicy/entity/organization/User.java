@@ -13,10 +13,6 @@ import ru.ochakovo.finpolicy.entity.BaseEntity;
 @Table(name = "users")
 public class User extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(unique = true, nullable = false)
     private String email;
 
@@ -33,8 +29,8 @@ public class User extends BaseEntity {
     private String lastName;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "organization_id")
-    private Organization organization;
+    @JoinColumn(name = "companies_id")
+    private Company company;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

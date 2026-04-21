@@ -7,17 +7,14 @@ import ru.ochakovo.finpolicy.entity.data.Report;
 import ru.ochakovo.finpolicy.entity.dictionary.Recommendation;
 import ru.ochakovo.finpolicy.entity.organization.User;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "accepted_recommendations")
 public class AcceptedRecommendation extends BaseEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "report_id")

@@ -2,9 +2,10 @@ package ru.ochakovo.finpolicy.entity.data;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ru.ochakovo.finpolicy.entity.organization.Organization;
+import ru.ochakovo.finpolicy.entity.organization.Company;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -12,13 +13,9 @@ import ru.ochakovo.finpolicy.entity.organization.Organization;
 @Table(name = "reports")
 public class Report extends AbstractFile {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "organization_id")
-    private Organization organization;
+    @JoinColumn(name = "companies_id")
+    private Company company;
 
     private String period;
     private String documentType;

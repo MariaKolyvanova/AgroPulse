@@ -4,17 +4,14 @@ import jakarta.persistence.*;
 import lombok.*;
 import ru.ochakovo.finpolicy.entity.BaseEntity;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "recommendations")
 public class Recommendation extends BaseEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "indicator_id")

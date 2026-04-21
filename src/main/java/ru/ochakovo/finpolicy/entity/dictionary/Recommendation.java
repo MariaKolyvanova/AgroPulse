@@ -1,8 +1,8 @@
-package ru.ochakovo.finpolicy.database.entity.dictionary;
+package ru.ochakovo.finpolicy.entity.dictionary;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ru.ochakovo.finpolicy.database.entity.BaseEntity;
+import ru.ochakovo.finpolicy.entity.BaseEntity;
 
 @Data
 @NoArgsConstructor
@@ -20,12 +20,9 @@ public class Recommendation extends BaseEntity {
     @JoinColumn(name = "indicator_id")
     private Indicator indicator;
 
-    @Column(nullable = false)
-    private String title;
+    private String name;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "condition_rule", columnDefinition = "TEXT")
     private String conditionRule;
 }

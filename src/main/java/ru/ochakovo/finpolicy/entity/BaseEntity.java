@@ -1,4 +1,4 @@
-package ru.ochakovo.finpolicy.database.entity;
+package ru.ochakovo.finpolicy.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -13,6 +13,9 @@ import java.time.Instant;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

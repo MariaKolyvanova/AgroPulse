@@ -1,9 +1,9 @@
-package ru.ochakovo.finpolicy.database.entity.data;
+package ru.ochakovo.finpolicy.entity.data;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ru.ochakovo.finpolicy.database.entity.BaseEntity;
-import ru.ochakovo.finpolicy.database.entity.dictionary.Indicator;
+import ru.ochakovo.finpolicy.entity.BaseEntity;
+import ru.ochakovo.finpolicy.entity.dictionary.Indicator;
 
 @Data
 @NoArgsConstructor
@@ -19,7 +19,7 @@ public class IndicatorValue extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "report_id")
-    private InitialData report;
+    private Report report;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "indicator_id")

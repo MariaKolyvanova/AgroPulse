@@ -17,11 +17,12 @@ public interface UserRepository
         QuerydslPredicateExecutor<User>
 {
     @Query("select u from User u " +
-            "where u.firstname like %:firstname% and u.lastname like %:lastname%")
+            "where u.firstName like %:firstname% and u.lastName like %:lastname%")
     List<User> findAllBy(String firstname, String lastname);
 
     List<User> findAllByCompanyId(Long companyId);
 
     boolean existsByUsername(String username);
 
+    User findByUsername(String username);
 }

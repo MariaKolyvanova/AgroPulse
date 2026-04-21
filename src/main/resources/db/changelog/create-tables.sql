@@ -1,7 +1,8 @@
 --liquibase formatted sql
 
 --changeset MariaKolyvanova:1
-CREATE TABLE IF NOT EXISTS companies
+-- Организационный слой: Организация
+CREATE TABLE IF NOT EXISTS organizations
 (
     id          BIGSERIAL PRIMARY KEY,
     name        VARCHAR(255) NOT NULL UNIQUE,
@@ -12,131 +13,128 @@ CREATE TABLE IF NOT EXISTS companies
 );
 
 --changeset MariaKolyvanova:2
+-- Организационный слой: Пользователь
 CREATE TABLE IF NOT EXISTS users
 (
-    id          BIGSERIAL PRIMARY KEY,
-    username    VARCHAR(64) UNIQUE NOT NULL,
-    password    VARCHAR(255) NOT NULL,
-    first_name  VARCHAR(64),
-    last_name   VARCHAR(64),
-    company_id  BIGINT REFERENCES companies (id) ON DELETE CASCADE,
-    role        VARCHAR(32) NOT NULL,
-    created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    id              BIGSERIAL PRIMARY KEY,
+    organization_id BIGINT REFERENCES organizations (id) ON DELETE CASCADE,
+    role            VARCHAR(32) NOT NULL, -- Enum: ADMINISTRATOR, OPERATOR, ANALYTIC
+    email           VARCHAR(255) UNIQUE NOT NULL,
+    password        VARCHAR(255) NOT NULL,
+    full_name       VARCHAR(255),
+    user_status     VARCHAR(32) NOT NULL DEFAULT 'ACTIVE', -- Enum: ACTIVE, ARCHIVE
+    created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 --changeset MariaKolyvanova:3
+-- Организационный слой: Лог аудита
 CREATE TABLE IF NOT EXISTS audit_logs
 (
-    id          BIGSERIAL PRIMARY KEY,
-    company_id  BIGINT REFERENCES companies (id) ON DELETE SET NULL,
-    user_id     BIGINT,
-    user_name   VARCHAR(255),
-    action      VARCHAR(255) NOT NULL,
-    description TEXT,
-    created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    id              BIGSERIAL PRIMARY KEY,
+    organization_id BIGINT REFERENCES organizations (id) ON DELETE SET NULL,
+    user_id         BIGINT,
+    entity_type     VARCHAR(64),
+    entity_id       BIGINT,
+    action          VARCHAR(255) NOT NULL,
+    description     TEXT,
+    created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 --changeset MariaKolyvanova:4
-CREATE TABLE IF NOT EXISTS initial_data
-(
-    id          BIGSERIAL PRIMARY KEY,
-    company_id  BIGINT NOT NULL REFERENCES companies (id) ON DELETE CASCADE,
-    name        VARCHAR(255) NOT NULL,
-    type_file   VARCHAR(64) NOT NULL,
-    period      VARCHAR(32) NOT NULL,
-    status      VARCHAR(32) NOT NULL,
-    file_path   VARCHAR(512) NOT NULL,
-    file_size   BIGINT,
-    created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
---changeset MariaKolyvanova:5
+-- Нормативный слой: Показатель
 CREATE TABLE IF NOT EXISTS indicators
 (
     id              BIGSERIAL PRIMARY KEY,
-    name            VARCHAR(255)       NOT NULL,
     code            VARCHAR(64) UNIQUE NOT NULL,
-    category        VARCHAR(64)        NOT NULL,
+    name            VARCHAR(255) NOT NULL,
+    category        VARCHAR(128),
+    value_type      VARCHAR(32) NOT NULL, -- Enum: IMPORTED, CALCULATED
     formula         TEXT,
-    normative_value DOUBLE PRECISION,
-    created_at      TIMESTAMP          NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at      TIMESTAMP          NOT NULL DEFAULT CURRENT_TIMESTAMP
+    normative_value TEXT,
+    unit            VARCHAR(32),
+    created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
---changeset MariaKolyvanova:6
-CREATE TABLE IF NOT EXISTS raw_data
-(
-    id           BIGSERIAL PRIMARY KEY,
-    report_id    BIGINT REFERENCES initial_data (id) ON DELETE CASCADE,
-    indicator_id BIGINT REFERENCES indicators (id),
-    row_index    INTEGER,
-    cell_address VARCHAR(16),
-    value        TEXT,
-    is_valid     BOOLEAN DEFAULT TRUE,
-    created_at   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
---changeset MariaKolyvanova:7
-CREATE TABLE IF NOT EXISTS indicator_values
-(
-    id           BIGSERIAL PRIMARY KEY,
-    report_id    BIGINT REFERENCES initial_data (id) ON DELETE CASCADE,
-    indicator_id BIGINT REFERENCES indicators (id),
-    value        DOUBLE PRECISION NOT NULL,
-    created_at   TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at   TIMESTAMP        NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
---changeset MariaKolyvanova:8
+--changeset MariaKolyvanova:5
+-- Нормативный слой: Рекомендация (Шаблоны)
 CREATE TABLE IF NOT EXISTS recommendations
 (
     id             BIGSERIAL PRIMARY KEY,
     indicator_id   BIGINT REFERENCES indicators (id) ON DELETE CASCADE,
-    title          VARCHAR(255) NOT NULL,
+    name           VARCHAR(255) NOT NULL,
     description    TEXT NOT NULL,
     condition_rule TEXT,
     created_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+--changeset MariaKolyvanova:6
+-- Операционный слой: Отчёт (включает атрибуты класса File)
+CREATE TABLE IF NOT EXISTS reports
+(
+    id              BIGSERIAL PRIMARY KEY,
+    organization_id BIGINT NOT NULL REFERENCES organizations (id) ON DELETE CASCADE,
+    period          VARCHAR(32) NOT NULL,
+    document_type   VARCHAR(64) NOT NULL,
+    status          VARCHAR(32) NOT NULL, -- Enum статус
+
+    -- Атрибуты абстрактного класса File для исходного файла
+    file_name       VARCHAR(255),
+    file_path       VARCHAR(512),
+    file_format     VARCHAR(16),
+    file_size       BIGINT,
+
+    created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+--changeset MariaKolyvanova:7
+-- Операционный слой: Сырые данные
+CREATE TABLE IF NOT EXISTS raw_data
+(
+    id             BIGSERIAL PRIMARY KEY,
+    report_id      BIGINT REFERENCES reports (id) ON DELETE CASCADE,
+    indicator_name VARCHAR(255),
+    value          TEXT,
+    error_text     TEXT,
+    created_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+--changeset MariaKolyvanova:8
+-- Операционный слой: Значение показателя
+CREATE TABLE IF NOT EXISTS indicator_values
+(
+    id           BIGSERIAL PRIMARY KEY,
+    report_id    BIGINT REFERENCES reports (id) ON DELETE CASCADE,
+    indicator_id BIGINT REFERENCES indicators (id),
+    value        DOUBLE PRECISION NOT NULL,
+    created_at   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 --changeset MariaKolyvanova:9
-CREATE TABLE IF NOT EXISTS analysis_results
+-- Аналитический слой: Комментарии
+CREATE TABLE IF NOT EXISTS report_comments
 (
     id          BIGSERIAL PRIMARY KEY,
-    report_id   BIGINT REFERENCES initial_data (id) ON DELETE CASCADE,
-    user_id  BIGINT    REFERENCES users (id) ON DELETE SET NULL,
-    comment     TEXT,
+    report_id   BIGINT REFERENCES reports (id) ON DELETE CASCADE,
+    comment     TEXT NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 --changeset MariaKolyvanova:10
+-- Аналитический слой: Принятая рекомендация
 CREATE TABLE IF NOT EXISTS accepted_recommendations
 (
-    id              BIGSERIAL PRIMARY KEY,
-    analysis_results_id     BIGINT REFERENCES analysis_results (id) ON DELETE CASCADE,
+    id                BIGSERIAL PRIMARY KEY,
+    report_id         BIGINT REFERENCES reports (id) ON DELETE CASCADE,
+    user_id           BIGINT REFERENCES users (id) ON DELETE SET NULL,
     recommendation_id BIGINT REFERENCES recommendations (id),
-    description     TEXT,
-    status          VARCHAR(32) DEFAULT 'ACCEPTED',
-    created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
-
-
---changeset MariaKolyvanova:11
-CREATE TABLE IF NOT EXISTS report_exports
-(
-    id          BIGSERIAL PRIMARY KEY,
-    analysis_results_id BIGINT REFERENCES analysis_results (id) ON DELETE CASCADE,
-    export_format VARCHAR(16) NOT NULL,
-    file_name   VARCHAR(255) NOT NULL,
-    file_path   VARCHAR(512) NOT NULL,
-    file_size   BIGINT,
-    created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-

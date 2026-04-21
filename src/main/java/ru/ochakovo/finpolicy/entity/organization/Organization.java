@@ -1,19 +1,17 @@
-package ru.ochakovo.finpolicy.database.entity.organization;
+package ru.ochakovo.finpolicy.entity.organization;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import ru.ochakovo.finpolicy.database.entity.BaseEntity;
+import lombok.*;
+import ru.ochakovo.finpolicy.entity.BaseEntity;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "companies")
-public class Company extends BaseEntity {
+@Getter
+@Setter
+@Table(name = "organizations")
+public class Organization extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

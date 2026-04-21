@@ -1,11 +1,11 @@
-package ru.ochakovo.finpolicy.database.entity.dictionary;
+package ru.ochakovo.finpolicy.entity.dictionary;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.ochakovo.finpolicy.database.entity.BaseEntity;
+import ru.ochakovo.finpolicy.entity.BaseEntity;
 
 @Data
 @NoArgsConstructor
@@ -25,12 +25,15 @@ public class Indicator extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String code;
 
-    @Column(nullable = false)
     private String category;
 
-    @Column(columnDefinition = "TEXT")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "value_type", nullable = false)
+    private ValueType valueType;
+
     private String formula;
 
-    @Column(name = "normative_value")
-    private Double normativeValue;
+    private String normativeValue;
+
+    private String unit;
 }

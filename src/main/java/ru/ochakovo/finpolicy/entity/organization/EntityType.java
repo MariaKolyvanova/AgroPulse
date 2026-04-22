@@ -1,7 +1,8 @@
 package ru.ochakovo.finpolicy.entity.organization;
 
 public enum EntityType {
-    ORGANIZATION,
+    COMPANY,
     USER,
-    REPORT
+    REPORT,
+    RECOMMENDATION
 }

@@ -13,6 +13,14 @@ import ru.ochakovo.finpolicy.entity.BaseEntity;
 @Table(name = "users")
 public class User extends BaseEntity {
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "companies_id")
+    private Company company;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
     @Column(unique = true, nullable = false)
     private String email;
 
@@ -22,33 +30,8 @@ public class User extends BaseEntity {
     @Column(name = "full_name")
     private String fullName;
 
-    @Transient
-    private String firstName;
-
-    @Transient
-    private String lastName;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "companies_id")
-    private Company company;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "user_status", nullable = false)
     private UserStatus userStatus;
-
-    private String[] splitFullName() {
-        if (fullName == null || fullName.isBlank()) {
-            return new String[]{"", ""};
-        }
-        String[] parts = fullName.trim().split("\\s+", 2);
-        if (parts.length == 1) {
-            return new String[]{parts[0], ""};
-        }
-        return parts;
-    }
 
 }

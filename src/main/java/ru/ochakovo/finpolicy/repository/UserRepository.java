@@ -1,14 +1,10 @@
-package ru.ochakovo.finpolicy.database.repository;
+package ru.ochakovo.finpolicy.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import org.springframework.data.repository.history.RevisionRepository;
 import org.springframework.stereotype.Repository;
-import ru.ochakovo.finpolicy.database.entity.organization.Company;
-import ru.ochakovo.finpolicy.database.entity.organization.User;
-
-import java.util.List;
+import ru.ochakovo.finpolicy.entity.organization.User;
 
 @Repository
 public interface UserRepository
@@ -17,12 +13,11 @@ public interface UserRepository
         QuerydslPredicateExecutor<User>
 {
     @Query("select u from User u " +
-            "where u.firstName like %:firstname% and u.lastName like %:lastname%")
-    List<User> findAllBy(String firstname, String lastname);
+            "where u.fullName like %:name%")
 
-    List<User> findAllByCompanyId(Long companyId);
+    boolean existsByEmail(String email);
 
-    boolean existsByUsername(String username);
+    User findByEmail(String email);
 
-    User findByUsername(String username);
+    User findUserById(Long userId);
 }

@@ -1,10 +1,9 @@
-package ru.ochakovo.finpolicy.repository;
+package ru.ochakovo.agropulse.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
-import ru.ochakovo.finpolicy.entity.organization.User;
+import ru.ochakovo.agropulse.entity.organization.User;
 
 @Repository
 public interface UserRepository
@@ -12,8 +11,7 @@ public interface UserRepository
         JpaRepository<User, Long>,
         QuerydslPredicateExecutor<User>
 {
-    @Query("select u from User u " +
-            "where u.fullName like %:name%")
+
 
     boolean existsByEmail(String email);
 

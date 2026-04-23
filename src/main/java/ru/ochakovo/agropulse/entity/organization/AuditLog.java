@@ -24,10 +24,10 @@ public class AuditLog extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private EntityType entityType;
 
+    private String entityName;
+
     @Enumerated(EnumType.STRING)
     private AuditAction action;
-
-    private Long entityId;
 
     private String description;
 }

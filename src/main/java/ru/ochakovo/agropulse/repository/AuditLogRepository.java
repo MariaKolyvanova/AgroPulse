@@ -1,20 +1,20 @@
-package ru.ochakovo.finpolicy.repository;
-
-
+package ru.ochakovo.agropulse.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
-import ru.ochakovo.finpolicy.entity.organization.AuditLog;
-import ru.ochakovo.finpolicy.entity.organization.Company;
+import ru.ochakovo.agropulse.entity.organization.AuditLog;
 
 import java.util.List;
 
 @Repository
-public interface AudLogRepository extends
+public interface AuditLogRepository extends
         JpaRepository<AuditLog, Long>,
-        QuerydslPredicateExecutor<AuditLog> {
+        QuerydslPredicateExecutor<AuditLog>,
+        JpaSpecificationExecutor<AuditLog> {
 
     List<AuditLog> findAllByUserId(Long userId);
 
     List<AuditLog> findAllByAction(String action);
+
 }

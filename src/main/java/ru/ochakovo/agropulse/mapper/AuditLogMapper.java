@@ -7,12 +7,14 @@ public class AuditLogMapper {
 
     public AuditLogDto toDto(AuditLog log) {
         return new AuditLogDto(
-                log.getId(),
-                log.getUser().getId(),
-                log.getAction(),
+                log.getCompany(),
+                log.getUser(),
                 log.getEntityType(),
-                log.getEntityId(),
-                log.getCreatedAt()
+                log.getEntityName(),
+                log.getAction(),
+                log.getDescription(),
+                log.getCreatedAt(),
+                log.getUpdatedAt()
         );
     }
 }

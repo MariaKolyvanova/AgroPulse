@@ -1,4 +1,4 @@
-package ru.ochakovo.finpolicy;
+package ru.ochakovo.agropulse;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,10 +11,10 @@ import ru.ochakovo.web.config.WebConfiguration;
 @EnableJpaAuditing
 @ConfigurationPropertiesScan
 @SpringBootApplication
-public class FinpolicyApplication {
+public class agropulseApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(FinpolicyApplication.class, args);
+        SpringApplication.run(agropulseApplication.class, args);
     }
 
 }

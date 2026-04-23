@@ -1,17 +1,17 @@
-package ru.ochakovo.finpolicy.service;
+package ru.ochakovo.agropulse.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.ochakovo.finpolicy.dto.CreateCompanyDto;
-import ru.ochakovo.finpolicy.dto.CreateUserDto;
-import ru.ochakovo.finpolicy.dto.UpdateUserDto;
-import ru.ochakovo.finpolicy.entity.organization.AuditAction;
-import ru.ochakovo.finpolicy.entity.organization.Company;
-import ru.ochakovo.finpolicy.entity.organization.EntityType;
-import ru.ochakovo.finpolicy.entity.organization.User;
-import ru.ochakovo.finpolicy.repository.CompanyRepository;
-import ru.ochakovo.finpolicy.repository.UserRepository;
+import ru.ochakovo.agropulse.dto.CreateCompanyDto;
+import ru.ochakovo.agropulse.dto.CreateUserDto;
+import ru.ochakovo.agropulse.dto.UpdateUserDto;
+import ru.ochakovo.agropulse.entity.organization.AuditAction;
+import ru.ochakovo.agropulse.entity.organization.Company;
+import ru.ochakovo.agropulse.entity.organization.EntityType;
+import ru.ochakovo.agropulse.entity.organization.User;
+import ru.ochakovo.agropulse.repository.CompanyRepository;
+import ru.ochakovo.agropulse.repository.UserRepository;
 
 @RequiredArgsConstructor
 @Service
@@ -39,7 +39,7 @@ public class UserManagementService {
 
         createUser(createUserDto);
 
-        auditLogService.log(EntityType.COMPANY, company.getName(), AuditAction.CREATE, "Создана компания" + company.getName());
+        auditLogService.log(EntityType.COMPANY, company.getName(), AuditAction.CREATE, "Создана компания " + company.getName());
 
     }
 
@@ -61,7 +61,7 @@ public class UserManagementService {
                         .userStatus(createUserDto.userStatus())
                         .build());
 
-        auditLogService.log(EntityType.USER, user.getFullName(), AuditAction.CREATE, "Создан пользователь" + user.getFullName());
+        auditLogService.log(EntityType.USER, user.getFullName(), AuditAction.CREATE, "Создан пользователь " + user.getFullName());
     }
 
     @Transactional

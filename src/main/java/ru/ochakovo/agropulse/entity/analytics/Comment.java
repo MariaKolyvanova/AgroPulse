@@ -1,10 +1,10 @@
-package ru.ochakovo.finpolicy.entity.analytics;
+package ru.ochakovo.agropulse.entity.analytics;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import ru.ochakovo.finpolicy.entity.BaseEntity;
-import ru.ochakovo.finpolicy.entity.data.Report;
+import ru.ochakovo.agropulse.entity.BaseEntity;
+import ru.ochakovo.agropulse.entity.data.Report;
 
 @Entity
 @Table(name = "report_comments")

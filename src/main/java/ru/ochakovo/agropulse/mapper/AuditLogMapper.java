@@ -1,20 +1,13 @@
-package ru.ochakovo.finpolicy.mapper;
+package ru.ochakovo.agropulse.mapper;
 
-import ru.ochakovo.finpolicy.dto.AuditLogDto;
-import ru.ochakovo.finpolicy.entity.organization.AuditLog;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import ru.ochakovo.agropulse.dto.AuditLogDto;
+import ru.ochakovo.agropulse.entity.organization.AuditLog;
 
-public class AuditLogMapper {
+@Mapper(componentModel = "spring")
+public interface AuditLogMapper {
 
-    public AuditLogDto toDto(AuditLog log) {
-        return new AuditLogDto(
-                log.getCompany(),
-                log.getUser(),
-                log.getEntityType(),
-                log.getEntityName(),
-                log.getAction(),
-                log.getDescription(),
-                log.getCreatedAt(),
-                log.getUpdatedAt()
-        );
-    }
+    @Mapping(target = "fullName", source = "user.fullName")
+    AuditLogDto toDto(AuditLog auditLog);
 }

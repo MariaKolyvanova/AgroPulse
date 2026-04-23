@@ -1,11 +1,11 @@
-package ru.ochakovo.finpolicy.service;
+package ru.ochakovo.agropulse.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import ru.ochakovo.finpolicy.entity.organization.Company;
-import ru.ochakovo.finpolicy.entity.organization.User;
-import ru.ochakovo.finpolicy.repository.UserRepository;
+import ru.ochakovo.agropulse.entity.organization.Company;
+import ru.ochakovo.agropulse.entity.organization.User;
+import ru.ochakovo.agropulse.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor

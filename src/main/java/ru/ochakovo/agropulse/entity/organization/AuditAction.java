@@ -1,4 +1,4 @@
-package ru.ochakovo.finpolicy.entity.organization;
+package ru.ochakovo.agropulse.entity.organization;
 
 public enum AuditAction {
     CREATE,

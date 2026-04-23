@@ -1,4 +1,4 @@
-package ru.ochakovo.finpolicy.entity.data;
+package ru.ochakovo.agropulse.entity.data;
 
 public enum ReportStatus {
     UPLOADED,

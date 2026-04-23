@@ -1,7 +1,7 @@
-package ru.ochakovo.finpolicy.dto;
+package ru.ochakovo.agropulse.dto;
 
-import ru.ochakovo.finpolicy.entity.organization.Role;
-import ru.ochakovo.finpolicy.entity.organization.UserStatus;
+import ru.ochakovo.agropulse.entity.organization.Role;
+import ru.ochakovo.agropulse.entity.organization.UserStatus;
 
 public record UpdateUserDto(
         Role role,

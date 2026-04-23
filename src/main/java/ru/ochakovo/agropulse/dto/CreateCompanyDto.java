@@ -1,4 +1,4 @@
-package ru.ochakovo.finpolicy.dto;
+package ru.ochakovo.agropulse.dto;
 
 public record CreateCompanyDto(
         String companyName,

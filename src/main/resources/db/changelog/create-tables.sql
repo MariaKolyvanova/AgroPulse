@@ -8,8 +8,7 @@ CREATE TABLE IF NOT EXISTS companies
     name        VARCHAR(255) NOT NULL UNIQUE,
     region      VARCHAR(128),
     industry    VARCHAR(128),
-    created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 --changeset MariaKolyvanova:2
@@ -23,8 +22,7 @@ CREATE TABLE IF NOT EXISTS users
     password        VARCHAR(255) NOT NULL,
     full_name       VARCHAR(255),
     user_status     VARCHAR(32) NOT NULL DEFAULT 'ACTIVE', -- Enum: ACTIVE, ARCHIVE
-    created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 --changeset MariaKolyvanova:3
@@ -35,11 +33,10 @@ CREATE TABLE IF NOT EXISTS audit_logs
     companies_id BIGINT REFERENCES companies (id) ON DELETE SET NULL,
     user_id         BIGINT,
     entity_type     VARCHAR(64),
-    entity_id       BIGINT,
+    entity_name     TEXT,
     action          VARCHAR(255) NOT NULL,
     description     TEXT,
-    created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 --changeset MariaKolyvanova:4
@@ -54,8 +51,7 @@ CREATE TABLE IF NOT EXISTS indicators
     formula         TEXT,
     normative_value TEXT,
     unit            VARCHAR(32),
-    created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 --changeset MariaKolyvanova:5
@@ -67,8 +63,7 @@ CREATE TABLE IF NOT EXISTS recommendations
     name           VARCHAR(255) NOT NULL,
     description    TEXT NOT NULL,
     condition_rule TEXT,
-    created_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 --changeset MariaKolyvanova:6
@@ -86,8 +81,7 @@ CREATE TABLE IF NOT EXISTS reports
     format     VARCHAR(16),
     size       BIGINT,
 
-    created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 --changeset MariaKolyvanova:7
@@ -99,8 +93,7 @@ CREATE TABLE IF NOT EXISTS raw_data
     indicator_name VARCHAR(255),
     value          TEXT,
     error_text     TEXT,
-    created_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 --changeset MariaKolyvanova:8
@@ -111,8 +104,7 @@ CREATE TABLE IF NOT EXISTS indicator_values
     report_id    BIGINT REFERENCES reports (id) ON DELETE CASCADE,
     indicator_id BIGINT REFERENCES indicators (id),
     value        DOUBLE PRECISION NOT NULL,
-    created_at   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 --changeset MariaKolyvanova:9
@@ -122,8 +114,7 @@ CREATE TABLE IF NOT EXISTS report_comments
     id          BIGSERIAL PRIMARY KEY,
     report_id   BIGINT REFERENCES reports (id) ON DELETE CASCADE,
     comment     TEXT NOT NULL,
-    created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 --changeset MariaKolyvanova:10
@@ -134,6 +125,5 @@ CREATE TABLE IF NOT EXISTS accepted_recommendations
     report_id         BIGINT REFERENCES reports (id) ON DELETE CASCADE,
     user_id           BIGINT REFERENCES users (id) ON DELETE SET NULL,
     recommendation_id BIGINT REFERENCES recommendations (id),
-    created_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

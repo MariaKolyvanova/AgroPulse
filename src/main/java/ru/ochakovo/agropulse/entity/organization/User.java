@@ -1,8 +1,8 @@
-package ru.ochakovo.finpolicy.entity.organization;
+package ru.ochakovo.agropulse.entity.organization;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ru.ochakovo.finpolicy.entity.BaseEntity;
+import ru.ochakovo.agropulse.entity.BaseEntity;
 
 @NoArgsConstructor
 @AllArgsConstructor

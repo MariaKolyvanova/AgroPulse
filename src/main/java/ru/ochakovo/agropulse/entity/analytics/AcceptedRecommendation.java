@@ -1,11 +1,11 @@
-package ru.ochakovo.finpolicy.entity.analytics;
+package ru.ochakovo.agropulse.entity.analytics;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ru.ochakovo.finpolicy.entity.BaseEntity;
-import ru.ochakovo.finpolicy.entity.data.Report;
-import ru.ochakovo.finpolicy.entity.dictionary.Recommendation;
-import ru.ochakovo.finpolicy.entity.organization.User;
+import ru.ochakovo.agropulse.entity.BaseEntity;
+import ru.ochakovo.agropulse.entity.data.Report;
+import ru.ochakovo.agropulse.entity.dictionary.Recommendation;
+import ru.ochakovo.agropulse.entity.organization.User;
 
 @Getter
 @Setter

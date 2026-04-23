@@ -1,4 +1,4 @@
-package ru.ochakovo.finpolicy.controllers;
+package ru.ochakovo.agropulse.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -6,9 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import ru.ochakovo.finpolicy.dto.CreateUserDto;
-import ru.ochakovo.finpolicy.service.AuditLogService;
-import ru.ochakovo.finpolicy.service.UserManagementService;
+import ru.ochakovo.agropulse.dto.CreateUserDto;
+import ru.ochakovo.agropulse.service.AuditLogService;
+import ru.ochakovo.agropulse.service.UserManagementService;
 
 @Controller
 @RequestMapping("api/auth")

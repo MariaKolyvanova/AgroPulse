@@ -1,4 +1,4 @@
-package ru.ochakovo.finpolicy.entity.dictionary;
+package ru.ochakovo.agropulse.entity.dictionary;
 
 public enum ValueType {
     IMPORTED,

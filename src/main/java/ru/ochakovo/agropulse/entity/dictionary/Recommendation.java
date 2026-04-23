@@ -1,8 +1,8 @@
-package ru.ochakovo.finpolicy.entity.dictionary;
+package ru.ochakovo.agropulse.entity.dictionary;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ru.ochakovo.finpolicy.entity.BaseEntity;
+import ru.ochakovo.agropulse.entity.BaseEntity;
 
 @Getter
 @Setter

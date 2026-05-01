@@ -7,8 +7,7 @@ CREATE TABLE IF NOT EXISTS companies
     id          BIGSERIAL PRIMARY KEY,
     name        VARCHAR(255) NOT NULL UNIQUE,
     region      VARCHAR(128),
-    industry    VARCHAR(128),
-    created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    industry    VARCHAR(128)
 );
 
 --changeset MariaKolyvanova:2
@@ -16,27 +15,22 @@ CREATE TABLE IF NOT EXISTS companies
 CREATE TABLE IF NOT EXISTS users
 (
     id              BIGSERIAL PRIMARY KEY,
-    companies_id BIGINT REFERENCES companies (id) ON DELETE CASCADE,
-    role            VARCHAR(32) NOT NULL, -- Enum: ADMINISTRATOR, OPERATOR, ANALYTIC
-    email           VARCHAR(255) UNIQUE NOT NULL,
-    password        VARCHAR(255) NOT NULL,
-    full_name       VARCHAR(255),
-    user_status     VARCHAR(32) NOT NULL DEFAULT 'ACTIVE', -- Enum: ACTIVE, ARCHIVE
-    created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
+    company_id      BIGINT REFERENCES companies (id) ON DELETE CASCADE,
 
---changeset MariaKolyvanova:3
--- Организационный слой: Лог аудита
-CREATE TABLE IF NOT EXISTS audit_logs
-(
-    id              BIGSERIAL PRIMARY KEY,
-    companies_id BIGINT REFERENCES companies (id) ON DELETE SET NULL,
-    user_id         BIGINT,
-    entity_type     VARCHAR(64),
-    entity_name     TEXT,
-    action          VARCHAR(255) NOT NULL,
-    description     TEXT,
-    created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    role            VARCHAR(32) NOT NULL,
+    username        VARCHAR(255) UNIQUE NOT NULL,
+    password        VARCHAR(128) NOT NULL,
+
+    last_name       VARCHAR(100),
+    first_name      VARCHAR(100),
+    patronymic      VARCHAR(100),
+
+    user_status     VARCHAR(32) NOT NULL DEFAULT 'ACTIVE',
+
+    created_date      TIMESTAMP,
+    modified_date     TIMESTAMP,
+    created_by      VARCHAR(32),
+    modified_by     VARCHAR(32)
 );
 
 --changeset MariaKolyvanova:4
@@ -50,8 +44,7 @@ CREATE TABLE IF NOT EXISTS indicators
     value_type      VARCHAR(32) NOT NULL, -- Enum: IMPORTED, CALCULATED
     formula         TEXT,
     normative_value TEXT,
-    unit            VARCHAR(32),
-    created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    unit            VARCHAR(32)
 );
 
 --changeset MariaKolyvanova:5
@@ -62,8 +55,7 @@ CREATE TABLE IF NOT EXISTS recommendations
     indicator_id   BIGINT REFERENCES indicators (id) ON DELETE CASCADE,
     name           VARCHAR(255) NOT NULL,
     description    TEXT NOT NULL,
-    condition_rule TEXT,
-    created_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    condition_rule TEXT
 );
 
 --changeset MariaKolyvanova:6
@@ -79,9 +71,21 @@ CREATE TABLE IF NOT EXISTS reports
     name       VARCHAR(255),
     path       VARCHAR(512),
     format     VARCHAR(16),
-    size       BIGINT,
+    size       BIGINT
+);
 
-    created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+
+CREATE TABLE IF NOT EXISTS report_audit
+(
+    id              BIGSERIAL PRIMARY KEY,
+
+    user_id         BIGINT REFERENCES users (id) ON DELETE CASCADE,
+    action          VARCHAR(32) NOT NULL,
+
+    report_id       BIGINT REFERENCES reports (id) ON DELETE CASCADE,
+    report_status   VARCHAR(32),
+
+    created_date     TIMESTAMP NOT NULL DEFAULT now()
 );
 
 --changeset MariaKolyvanova:7
@@ -92,8 +96,7 @@ CREATE TABLE IF NOT EXISTS raw_data
     report_id      BIGINT REFERENCES reports (id) ON DELETE CASCADE,
     indicator_name VARCHAR(255),
     value          TEXT,
-    error_text     TEXT,
-    created_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    error_text     TEXT
 );
 
 --changeset MariaKolyvanova:8
@@ -103,8 +106,7 @@ CREATE TABLE IF NOT EXISTS indicator_values
     id           BIGSERIAL PRIMARY KEY,
     report_id    BIGINT REFERENCES reports (id) ON DELETE CASCADE,
     indicator_id BIGINT REFERENCES indicators (id),
-    value        DOUBLE PRECISION NOT NULL,
-    created_at   TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    value        DOUBLE PRECISION NOT NULL
 );
 
 --changeset MariaKolyvanova:9
@@ -113,8 +115,7 @@ CREATE TABLE IF NOT EXISTS report_comments
 (
     id          BIGSERIAL PRIMARY KEY,
     report_id   BIGINT REFERENCES reports (id) ON DELETE CASCADE,
-    comment     TEXT NOT NULL,
-    created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    comment     TEXT NOT NULL
 );
 
 --changeset MariaKolyvanova:10
@@ -124,6 +125,5 @@ CREATE TABLE IF NOT EXISTS accepted_recommendations
     id                BIGSERIAL PRIMARY KEY,
     report_id         BIGINT REFERENCES reports (id) ON DELETE CASCADE,
     user_id           BIGINT REFERENCES users (id) ON DELETE SET NULL,
-    recommendation_id BIGINT REFERENCES recommendations (id),
-    created_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    recommendation_id BIGINT REFERENCES recommendations (id)
 );

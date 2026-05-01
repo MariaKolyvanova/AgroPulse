@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta content="width=device-width, initial-scale=1" name="viewport">
+	<title>User</title>
+</head>
+<body>
+	<form method="post" th:action="@{/users/{userId}/update(userId=${user.id})}" th:object="${user}"
+	      th:if="${user.userStatus.name() == 'ADMINISTATOR'}">
+		<label for="fullName"> ФИО:
+			<input id="fullName" name="fullName" th:value="*{fullName}" type="text">
+		</label><br>
+		<label for="email"> Почта:
+			<input id="email" name="email" th:value="*{email}" type="email">
+		</label><br>
+		<label for="password"> Пароль:
+			<input id="password" name="password" th:value="*{password}" type="text">
+		</label><br>
+		<div th:each="role : ${roles}">
+			<input name="role" th:checked="${role == user.role}" th:id="${role}" th:value="${role}" type="radio">
+			<label th:for="${role}" th:text="${role}">Role name</label>
+			<!--			<label th:for="${role}" th:text="${#strings.role}">Role name</label>-->
+		</div>
+		<div>
+			<label for="userStatus">
+				<select id="userStatus" name="userStatus">
+					<option th:each="status : ${statuses}"
+					        th:selected="${status == user.userStatus}"
+					        th:text="${status.name()}"
+					        th:value="${status.name()}"
+					>Status
+					</option>
+				</select>
+			</label>
+		</div>
+		<button type="submit">Update</button>
+	
+	
+	</form>
+	<!--	<form th:action="@{/users/{userId}/update(userId=${user.id}, можно перечислять)}"></form>-->
+	<!--	<form th:action="@{/users/{id}/update}"></form>-->
+</body>
+</html> 

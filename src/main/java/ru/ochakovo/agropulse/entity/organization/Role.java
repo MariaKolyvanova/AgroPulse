@@ -1,7 +1,15 @@
 package ru.ochakovo.agropulse.entity.organization;
 
-public enum Role {
+import org.jspecify.annotations.Nullable;
+import org.springframework.security.core.GrantedAuthority;
+
+public enum Role implements GrantedAuthority {
     ADMINISTRATOR,
     OPERATOR,
-    ANALYTIC
+    ANALYTIC;
+
+    @Override
+    public @Nullable String getAuthority() {
+        return name();
+    }
 }

@@ -1,36 +1,83 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
 	<meta content="width=device-width, initial-scale=1" name="viewport">
-	<title>Registration</title>
+	<title>Регистрация организации</title>
+	<link rel="icon" type="image/svg+xml" href="/images/icon.svg">
+	<link rel="alternate icon" href="/images/icon.ico">
+	<link rel="stylesheet" th:href="@{/css/styles.css}">
+	<link rel="stylesheet" th:href="@{/css/auth.css}">
 </head>
 <body>
-	<form method="post" th:action="@{/users}" th:object="${user}">
-		<label for="lastName"> Фамилия:
-			<input id="lastName" name="lastName" th:value="*{lastName()}" type="text">
-		</label><br>
-		<label for="firstName"> Имя:
-			<input id="firstName" name="firstName" th:value="*{firstName()}" type="text">
-		</label><br>
-		<label for="patronymic"> Отчество:
-			<input id="patronymic" name="patronymic" th:value="*{patronymic()}" type="text">
-		</label><br>
-		<label for="username"> Почта:
-			<input id="username" name="username" th:value="*{username}" type="email">
-		</label><br>
-		<label for="password"> Пароль:
-			<input id="password" name="password" type="password">
-		</label><br>
-		<div th:each="role : ${roles}">
-			<input name="role" th:checked="${role == user.role}" th:id="${role}" th:value="${role}" type="radio">
-			<label th:for="${role}" th:text="${role}">Role name</label>
-		</div>
-		<button type="submit">Register</button>
-	</form>
-	
-	<div th:if="${errors}">
-		<p style="color: red" th:each="error : ${errors}" th:text="${error.defaultMessage}">Error message</p>
-	</div>
+	<main class="auth">
+		<section class="auth-card auth-card-wide" aria-labelledby="registration-title">
+			<h1 id="registration-title">Регистрация организации</h1>
+
+			<form class="auth-form" method="post" th:action="@{/registration}">
+				<div class="auth-errors" th:if="${errors}">
+					<p class="auth-error" th:each="error : ${errors}" th:text="${error.defaultMessage}">Error message</p>
+				</div>
+
+				<p class="auth-section-label">ОРГАНИЗАЦИЯ</p>
+				<label class="auth-label" for="name">Название организации</label>
+				<input class="auth-input" id="name" name="name" th:value="${company.name()}" type="text"
+				       placeholder="введите название организации" required>
+
+				<div class="auth-row auth-row-2">
+					<div class="auth-field">
+						<label class="auth-label" for="region">Регион</label>
+						<input class="auth-input" id="region" name="region" th:value="${company.region()}"
+						       type="text" placeholder="введите регион" required>
+					</div>
+					<div class="auth-field">
+						<label class="auth-label" for="industry">Отрасль</label>
+						<input class="auth-input" id="industry" name="industry" th:value="${company.industry()}"
+						       type="text" placeholder="введите отрасль" required>
+					</div>
+				</div>
+				
+				<p class="auth-section-label">КОНТАКТНОЕ ЛИЦО</p>
+				<div class="auth-row auth-row-3">
+					<div class="auth-field">
+						<label class="auth-label" for="lastName">Фамилия</label>
+						<input class="auth-input" id="lastName" name="lastName" th:value="${user.lastName()}"
+						       type="text" placeholder="введите фамилию" required>
+					</div>
+					<div class="auth-field">
+						<label class="auth-label" for="firstName">Имя</label>
+						<input class="auth-input" id="firstName" name="firstName" th:value="${user.firstName()}"
+						       type="text" placeholder="введите имя" required>
+					</div>
+					<div class="auth-field">
+						<label class="auth-label" for="patronymic">Отчество</label>
+						<input class="auth-input" id="patronymic" name="patronymic" th:value="${user.patronymic()}"
+						       type="text" placeholder="введите отчество">
+					</div>
+				</div>
+
+				<div class="auth-row">
+					<div class="auth-field">
+						<label class="auth-label" for="username">Электронная почта</label>
+						<input class="auth-input" id="username" name="username" th:value="${user.username()}"
+						       type="email" placeholder="введите электронную почту" autocomplete="username" required>
+					</div>
+					<div class="auth-field">
+						<label class="auth-label" for="password">Пароль</label>
+						<input class="auth-input" id="password" name="password" type="password"
+						       placeholder="введите пароль" autocomplete="new-password" required>
+					</div>
+				</div>
+
+				<input name="role" value="ADMINISTRATOR" type="hidden">
+				<button class="auth-submit" type="submit">Зарегистрировать организацию</button>
+			</form>
+			<div class="center">
+				<p class="or secondary-text">Или</p>
+				<a class="auth-link" th:href="@{/login}">Войти</a>
+			</div>
+			
+		</section>
+	</main>
 </body>
 </html>

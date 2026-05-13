@@ -1,10 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<link rel="stylesheet" th:href="@{/css/styles.css}">
+	<link rel="stylesheet" th:href="@{/css/menu.css}">
+	<link rel="icon" type="image/svg+xml" href="/images/icon.svg">
+	<link rel="alternate icon" href="/images/icon.ico">
 </head>
 <body>
-$END$
+	<div class="menu" th:fragment="menu">
+		<h1 class="company-name" th:text="${company.name()}">Компания</h1>
+		
+		<nav>
+			<ul class="menu">
+				<li class="menu-item"
+				    th:classappend="${requestPath == item.url} ? 'menu-item-active'"
+				    th:each="item : ${menuItems}">
+					
+					<a class="menu-link" th:href="@{${item.url}}">
+						<img alt="icon" class="menu-icon"
+						     th:classappend="' menu-icon-' + ${item.name}"
+						     th:src="'/images/menu/' + ${item.name} + (${requestPath == item.url} ? '_active.svg' : '.svg')">
+						<span class="menu-text" th:text="${item.title}"></span>
+					</a>
+				</li>
+			</ul>
+		</nav>
+		
+		<div class="profile">
+			<a class="profile menu-item" th:href="@{'/users/' + ${user.id()}}"
+			   th:classappend="${requestPath == '/users/' + user.id()} ? 'menu-item-active'">
+				<img alt="icon" class="profile"
+				     th:src="'/images/menu/profile' + (${requestPath == '/profile'} ? '_active.svg' : '.svg')">
+				<span class="menu-text" th:text="${user.lastName() + ' ' + user.firstName()}">Фамилия И.О.</span>
+			</a>
+		</div>
+		
+		
+		<form method="post" th:action="@{/logout}" id="logoutForm">
+			<div class="logout menu-item" onclick="document.getElementById('logoutForm').submit();">
+				<img class="logout" alt="logout" src="/images/menu/logout.svg">
+				<span class="logout">Выйти</span>
+			</div>
+		</form>
+	</div>
+
 </body>
 </html>

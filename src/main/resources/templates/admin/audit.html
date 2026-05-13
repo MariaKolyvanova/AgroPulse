@@ -2,11 +2,325 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
-	<title>Admin</title>
-	<link rel="stylesheet" th:href="@{/css/style.css}">
+	<title>Журнал аудита</title>
+	<link rel="icon" type="image/svg+xml" href="/images/icon.svg">
+	<link rel="alternate icon" href="/images/icon.ico">
+	<link rel="stylesheet" th:href="@{/css/styles.css}">
 	<link rel="stylesheet" th:href="@{/css/menu.css}">
+	<link rel="stylesheet" th:href="@{/css/audit.css}">
+	<script th:src="@{/js/user.js}"></script>
+
 </head>
 <body>
-	<div th:insert="~{menu :: menu}"></div>
+	<section class="menu" th:insert="~{menu :: menu}"></section>
+	<main class="content">
+		
+		<h1 class="name">Журнал аудита</h1>
+		
+		<div class="tabs">
+			<a class="tabs reports"
+			   onclick="tabs('reports')"
+			   th:classappend="${tab == 'reports'} ? 'active'"
+			   th:href="@{/admin/audit(tab='reports')}"
+			>
+				Действия с отчётами
+			</a>
+			
+			<a class="tabs auth"
+			   onclick="tabs('auth')"
+			   th:classappend="${tab == 'auth'} ? 'active'"
+			   th:href="@{/admin/audit(tab='auth')}"
+			>
+				История входов
+			</a>
+			
+			<a class="tabs users"
+			   onclick="tabs('users')"
+			   th:classappend="${tab == 'users'} ? 'active'"
+			   th:href="@{/admin/audit(tab='users')}"
+			>
+				Изменения пользователей
+			</a>
+		</div>
+		
+		<div th:switch="${tab}">
+			
+			<!-- Действия с отчётами -->
+			<!--			<div th:case="'reports'">-->
+			<!--			TODO: СОРТИРОВКА -->
+			<div th:case="'reports'">
+				<section class="reportAudit">
+					<form th:action="@{/admin/audit}">
+						<input name="tab" th:value="${tab}" type="hidden">
+						<div class="filter">
+							<input class="filter fullName reports" name="fullName" placeholder="Сотрудник"
+							       th:value="${reportAuditFilter.fullName()}"
+							       type="text">
+							<input class="filter ip" name="status" placeholder="Статус"
+							       th:value="${reportAuditFilter.status()}"
+							       type="text">
+							<input class="filter report" name="reportName" placeholder="Отчёт"
+							       th:value="${reportAuditFilter.reportName()}"
+							       type="text">
+							<input class="filter date" name="from" th:value="${reportAuditFilter.from()}"
+							       type="date">
+							<input class="filter date" name="to" th:value="${reportAuditFilter.to()}" type="date">
+							<button class="button pageable" type="submit">Найти</button>
+						</div>
+						
+						<div class="pageable">
+							
+							<div class="size">
+								Показать
+								<select class="size" name="size" onchange="this.form.submit()">
+									<option th:selected="${reportAudits.metadata.size == 20}" th:value="20">20
+									</option>
+									<option th:selected="${reportAudits.metadata.size == 40}" th:value="40">40
+									</option>
+									<option th:selected="${reportAudits.metadata.size == 80}" th:value="80">80
+									</option>
+								</select>
+								элементов
+							</div>
+							
+							<div class="page">
+								Страница:
+								<select class="page" name="page" onchange="this.form.submit()">
+									<option th:each="i : ${#numbers.sequence(0, reportAudits.metadata.totalPages - 1)}"
+									        th:selected="${i == reportAudits.metadata.page}"
+									        th:text="${i + 1}"
+									        th:value="${i}">
+									</option>
+								</select>
+								
+								из
+								<span th:text="${reportAudits.metadata.totalPages}">25</span>
+							</div>
+						
+						</div>
+						
+						<table class="audit">
+							<thead>
+							<tr>
+								<th class="column-4">Сотрудник</th>
+								<th class="column-4">Статус</th>
+								<th class="column-4">Отчёт</th>
+								<th class="column-4">Дата</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr th:each="reportAudit : ${reportAudits.content}">
+								<td>
+									<a class="link"
+									   th:href="@{'/users/' + ${reportAudit.userId()}}"
+									   th:text="${reportAudit.fullName()}">User</a>
+								</td>
+								<td th:text="${reportAudit.status()}"></td>
+								<td th:text="${reportAudit.reportName()}"></td>
+								<td th:text="${#temporals.format(reportAudit.date(), 'HH:mm dd.MM.yyyy')}"></td>
+							</tr>
+							</tbody>
+						</table>
+						
+						<div class="shown">
+							Показано
+							<span
+									th:text="${reportAudits.metadata.totalElements == 0 ? 0 : (reportAudits.metadata.page * reportAudits.metadata.size + 1)}"></span>
+							–
+							<span th:text="${reportAudits.metadata.totalElements == 0 ? 0 :
+						    (((reportAudits.metadata.page + 1) * reportAudits.metadata.size) > reportAudits.metadata.totalElements
+						        ? reportAudits.metadata.totalElements
+						        : ((reportAudits.metadata.page + 1) * reportAudits.metadata.size))}">
+						</span>
+							из
+							<span th:text="${reportAudits.metadata.totalElements}"></span>
+						</div>
+					
+					</form>
+				</section>
+			</div>
+			
+			<!-- История входов -->
+			<div th:case="'auth'">
+				<section class="authAudit">
+					<form th:action="@{/admin/audit}">
+						<input name="tab" th:value="${tab}" type="hidden">
+						<div class="filter">
+							<input class="filter fullName" name="fullName" placeholder="Сотрудник"
+							       th:value="${authAuditFilter.fullName()}"
+							       type="text">
+							<input class="filter ip" name="ip" placeholder="ip" th:value="${authAuditFilter.ip()}"
+							       type="text">
+							<input class="filter date" name="from" th:value="${authAuditFilter.from()}" type="date">
+							<input class="filter date" name="to" th:value="${authAuditFilter.to()}" type="date">
+							<button class="button pageable" type="submit">Найти</button>
+						</div>
+						
+						<div class="pageable">
+							
+							<div class="size">
+								Показать
+								<select class="size" name="size" onchange="this.form.submit()">
+									<option th:selected="${authAudits.metadata.size == 20}" th:value="20">20</option>
+									<option th:selected="${authAudits.metadata.size == 40}" th:value="40">40</option>
+									<option th:selected="${authAudits.metadata.size == 80}" th:value="80">80</option>
+								</select>
+								элементов
+							</div>
+							
+							<div class="page">
+								Страница:
+								<select class="page" id="page" name="page" onchange="this.form.submit()">
+									<option th:each="i : ${#numbers.sequence(0, authAudits.metadata.totalPages - 1)}"
+									        th:selected="${i == authAudits.metadata.page}"
+									        th:text="${i + 1}"
+									        th:value="${i}">
+									</option>
+								</select>
+								
+								из
+								<span th:text="${authAudits.metadata.totalPages}">25</span>
+							</div>
+						
+						</div>
+						
+						<table class="audit">
+							<thead>
+							<tr>
+								<th class="column-3">Сотрудник</th>
+								<th class="column-3">ip</th>
+								<th class="column-3">Дата</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr th:each="authAudit : ${authAudits.content}">
+								<td>
+									<a class="link"
+									   th:href="@{'/users/' + ${authAudit.userId()}}"
+									   th:text="${authAudit.fullName()}">User</a>
+								</td>
+								<td th:text="${authAudit.ip()}"></td>
+								<td th:text="${#temporals.format(authAudit.authAt(), 'HH:mm dd.MM.yyyy')}"></td>
+							</tr>
+							</tbody>
+						</table>
+						
+						<div class="shown">
+							Показано
+							<span th:text="${authAudits.metadata.totalElements == 0 ? 0 : (authAudits.metadata.page * authAudits.metadata.size + 1)}"></span>
+							–
+							<span th:text="${authAudits.metadata.totalElements == 0 ? 0 :
+						    (((authAudits.metadata.page + 1) * authAudits.metadata.size) > authAudits.metadata.totalElements
+						        ? authAudits.metadata.totalElements
+						        : ((authAudits.metadata.page + 1) * authAudits.metadata.size))}">
+						</span>
+							из
+							<span th:text="${authAudits.metadata.totalElements}"></span>
+						</div>
+					
+					</form>
+				</section>
+			</div>
+			
+			<!-- Изменения пользователей -->
+			<div th:case="'users'">
+				<section class="userAudit">
+					<form th:action="@{/admin/audit}">
+						<input name="tab" th:value="${tab}" type="hidden">
+						<div class="filter">
+							<input class="filter modifiedByFullName" name="modifiedByFullName"
+							       placeholder="Системный администратор"
+							       th:value="${userAuditFilter.modifiedByFullName()}"
+							       type="text">
+							<input class="filter modifiedUserFullName" name="modifiedUserFullName"
+							       placeholder="Сотрудник"
+							       th:value="${userAuditFilter.modifiedUserFullName()}"
+							       type="text">
+							<input class="filter date" name="from" th:value="${userAuditFilter.from()}" type="date">
+							<input class="filter date" name="to" th:value="${userAuditFilter.to()}" type="date">
+							
+							<button class="button pageable" type="submit">Найти</button>
+						</div>
+						
+						<div class="pageable">
+							
+							<div class="size">
+								Показать
+								<select class="size" name="size" onchange="this.form.submit()">
+									<option th:selected="${userAudits.metadata.size == 20}" th:value="20">20</option>
+									<option th:selected="${userAudits.metadata.size == 40}" th:value="40">40</option>
+									<option th:selected="${userAudits.metadata.size == 80}" th:value="80">80</option>
+								</select>
+								элементов
+							</div>
+							
+							<div class="page">
+								Страница:
+								<select class="page" name="page" onchange="this.form.submit()">
+									<option th:each="i : ${#numbers.sequence(0, userAudits.metadata.totalPages - 1)}"
+									        th:selected="${i == userAudits.metadata.page}"
+									        th:text="${i + 1}"
+									        th:value="${i}">
+									</option>
+								</select>
+								
+								из
+								<span th:text="${userAudits.metadata.totalPages}">25</span>
+							</div>
+						
+						</div>
+						
+						<table class="audit">
+							<thead>
+							<tr>
+								<th class="column-3">Системный администратор</th>
+								<th class="column-3">Сотрудник</th>
+								<th class="column-3">Дата</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr th:each="userAudit : ${userAudits.content}">
+								<td>
+									<a class="link"
+									   th:href="@{'/users/' + ${userAudit.modifiedById()}}"
+									   th:text="${userAudit.modifiedByFullName()}">User</a>
+								</td>
+								<td>
+									<a class="link"
+									   th:href="@{'/users/' + ${userAudit.modifiedUserId()}}"
+									   th:text="${userAudit.modifiedUserFullName()}">User</a>
+								</td>
+								<td th:text="${#temporals.format(userAudit.modifiedAt(), 'HH:mm dd.MM.yyyy')}"></td>
+							</tr>
+							</tbody>
+						</table>
+						
+						<div class="shown">
+							Показано
+							<span
+									th:text="${userAudits.metadata.totalElements == 0 ? 0 : (userAudits.metadata.page * userAudits.metadata.size + 1)}"></span>
+							–
+							<span th:text="${userAudits.metadata.totalElements == 0 ? 0 :
+													    (((userAudits.metadata.page + 1) * userAudits.metadata.size) > userAudits.metadata.totalElements
+													        ? userAudits.metadata.totalElements
+													        : ((userAudits.metadata.page + 1) * userAudits.metadata.size))}">
+													</span>
+							из
+							<span th:text="${userAudits.metadata.totalElements}"></span>
+						</div>
+					
+					</form>
+				</section>
+			</div>
+		
+		</div>
+	
+	
+	</main>
 </body>
 </html>
+
+
+
+
+

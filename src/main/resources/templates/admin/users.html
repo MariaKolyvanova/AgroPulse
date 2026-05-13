@@ -1,13 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
-	<title>Admin</title>
-	<link rel="stylesheet" th:href="@{/css/style.css}">
+	<title>Сотрудники</title>
+	<link rel="icon" type="image/svg+xml" href="/images/icon.svg">
+	<link rel="alternate icon" href="/images/icon.ico">
+	<link rel="stylesheet" th:href="@{/css/styles.css}">
 	<link rel="stylesheet" th:href="@{/css/menu.css}">
+	<link rel="stylesheet" th:href="@{/css/users.css}">
 </head>
 <body>
-	HI ADMIN!
-	<div th:insert="~{menu :: menu}"></div>
+	<section class="menu" th:insert="~{menu :: menu}"></section>
+	<main class="content">
+		
+		<h1 class="name">Сотрудники</h1>
+		
+		<section class="users">
+			
+			<table>
+				<thead>
+				<tr>
+					<th class="column-3">ФИО</th>
+					<th class="column-3">Роль</th>
+					<th class="column-3">Статус</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr th:each="user : ${users}"
+				    th:onclick="|window.location.href='@{/users/{id}(id=${user.id()})}'|">
+						<td>
+							<a th:href="@{'/users/' + ${user.id()}}"
+							   th:text="${user.fullName()}"></a>
+						</td>
+						<td th:text="${user.role.label}"></td>
+						<td>
+					    <span th:classappend="' status-' + ${user.userStatus}"
+					          th:text="${user.userStatus.label}"></span>
+						</td>
+				
+				</tr>
+				</tbody>
+			</table>
+			
+			<a th:href="@{/users/newUser}" class="button addUser" type="button"> + Добавить сотрудника</a>
+		</section>
+	</main>
 </body>
 </html>

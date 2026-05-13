@@ -1,28 +1,39 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
 	<meta content="width=device-width, initial-scale=1" name="viewport">
-	<title>Login</title>
+	<title>Авторизация</title>
+	<link rel="icon" type="image/svg+xml" href="/images/icon.svg">
+	<link rel="alternate icon" href="/images/icon.ico">
+	<link rel="stylesheet" th:href="@{/css/styles.css}">
+	<link rel="stylesheet" th:href="@{/css/auth.css}">
 </head>
 <body>
-	<div th:insert="~{fragment :: locale}"></div>
-	<form th:action="@{/login}" method="post">
-		<div style="color: red;" th:if="${param.error}">
-			Bad credentials
-		</div>
-		
-		<label for="username"> <span th:text="#{login.username}"></span>
-			<input id="username" name="username" type="email">
-		</label><br>
-		<label for="password"> <span th:text="#{login.password}"></span>
-			<input id="password" name="password" type="password">
-		</label><br>
-		<button type="submit">Login</button>
-	</form>
-	
-	<form action="/users/registration">
-		<button type="submit">Registration</button>
-	</form>
+	<main class="auth">
+		<section aria-labelledby="login-title" class="auth-card">
+			<h1 class="login-title" id="login-title">Авторизация</h1>
+			
+			<form class="auth-form" method="post" th:action="@{/login}">
+				<p class="auth-error" th:if="${param.error}">
+					Неверный логин или пароль
+				</p>
+				
+				<label class="auth-label" for="username">Электронная почта</label>
+				<input autocomplete="username" class="auth-input" placeholder="введите электронную почту"  id="username" name="username" required type="email">
+				
+				<label class="auth-label" for="password">Пароль</label>
+				<input autocomplete="current-password" class="auth-input" placeholder="введите пароль"
+				       id="password" name="password" required
+				       type="password">
+				
+				<button class="auth-submit" type="submit">Войти</button>
+			</form>
+			<div class="center">
+				<p class="or secondary-text">Или</p> <br>
+				<a class="auth-link" th:href="@{/registration}">Зарегистрировать организацию</a>
+			</div>
+		</section>
+	</main>
 </body>
 </html>

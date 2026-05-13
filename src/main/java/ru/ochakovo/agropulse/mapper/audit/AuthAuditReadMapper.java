@@ -1,0 +1,32 @@
+package ru.ochakovo.agropulse.mapper;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import ru.ochakovo.agropulse.dto.audit.AuthAuditReadDto;
+import ru.ochakovo.agropulse.entity.audit.AuthAudit;
+import ru.ochakovo.agropulse.entity.organization.User;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
+@Mapper(componentModel = "spring")
+public interface AuthAuditReadMapper {
+
+    @Mapping(source = "company.id", target = "companyId")
+    @Mapping(source = "user.id", target = "userId")
+    @Mapping(target = "fullName", expression = "java(buildFullName(authAudit.getUser()))")
+    AuthAuditReadDto map(AuthAudit authAudit);
+
+    default String buildFullName(User user) {
+        return user.getLastName() + " " +
+                user.getFirstName() + " " +
+                user.getPatronymic();
+    }
+
+    default Instant map(LocalDateTime value) {
+        return value == null
+                ? null
+                : value.atZone(ZoneId.systemDefault()).toInstant();
+    }
+}

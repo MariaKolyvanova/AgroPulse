@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/changelog/create-tables.sql
   - include:
       file: db/changelog/create-envers.sql
+  - include:
+      file: db/changelog/db.changelog-indicators-data.sql

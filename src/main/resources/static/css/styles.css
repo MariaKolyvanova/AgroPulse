@@ -1,0 +1,76 @@
+main {
+    background-color: white;
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 60px 60px 60px 320px;
+}
+
+:root {
+    --color-bg: #F8FAFC;
+    --color-primary: #3B82F6;
+    --color-primary-light: #DBEAFE;
+    --color-secondary-text: #6B7280;
+    --color-border: #E7E5E4;
+    --color-red: #EF4444;
+    --color-green: #34D399;
+
+    --font-family: Inter, sans-serif;
+
+    --text-h1-size: 24px;
+    --text-h2-size: 20px;
+    --text-h3-size: 16px;
+    --text-body-size: 14px;
+    --text-secondary-size: 14px;
+    --text-input: 16px;
+    --text-button: 20px;
+
+    --font-weight-button: 500;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    color: black;
+    font-family: var(--font-family);
+}
+
+body {
+    font-size: var(--text-body-size);
+    line-height: 1.5;
+    background-color: var(--color-bg);
+}
+
+h1 {
+    font-size: var(--text-h1-size);
+    font-weight: 600;
+    color: black;
+}
+
+h2 {
+    font-size: var(--text-h2-size);
+    font-weight: 500;
+    color: black;
+}
+
+h3 {
+    font-size: var(--text-h3-size);
+    font-weight: 400;
+    color: black;
+}
+
+body, p {
+    font-size: var(--text-body-size);
+    font-weight: 400;
+    color: black;
+}
+
+.secondary-text {
+    font-size: var(--text-secondary-size);
+    font-weight: 400;
+    color: var(--color-secondary-text);
+}
+

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Отчёт</title>
+	<link rel="icon" type="image/svg+xml" href="/images/icon.svg">
+	<link rel="alternate icon" href="/images/icon.ico">
+	<link rel="stylesheet" th:href="@{/css/styles.css}">
+	<link rel="stylesheet" th:href="@{/css/menu.css}">
+	<link rel="stylesheet" th:href="@{/css/report.css}">
+</head>
+<body>
+	<section class="menu" th:insert="~{menu :: menu}"></section>
+	<main class="content">
+		
+		<h1 class="name">Отчёт</h1>
+		
+		<section class="report block">
+			<div class="label-left">
+				<div class="label">
+					<span class="label">Название отчёта</span>
+					<span class="value" th:text="${report.reportName()}"></span>
+					
+					<span class="label">Период</span>
+					<div class="value-period">
+						<span class="value"
+						      th:text="${T(ru.ochakovo.agropulse.entity.data.Month).values()[report.reportMonth() - 1].getName()}"></span>
+						<span class="value" th:text="${report.reportYear()}"></span>
+					</div>
+					
+					<span class="label">Статус</span>
+					<span class="value" th:text="${report.status().label}"></span>
+				</div>
+			</div>
+			
+			<div class="label-right">
+				<div class="label">
+					<span class="label">Название документа</span>
+					<span class="value" th:text="${report.originalFilename()}"></span>
+					
+					<span class="label">Дата создания</span>
+					<span class="value"
+					      th:text="${#temporals.format(report.createdAt(), 'HH:mm dd.MM.yyyy')}"></span>
+					
+					<span class="label">Дата последнего изменения</span>
+					<span class="value"
+					      th:text="${#temporals.format(report.updatedAt(), 'HH:mm dd.MM.yyyy')}"></span>
+				</div>
+			</div>
+<!--			<span>Количество показателей:</span>-->
+<!--			<span th:text="${info.size()}"></span>-->
+<!--			<span>Показатели:</span>-->
+<!--			<span th:text="${info.indicators()}"></span>-->
+		</section>
+		
+		<h2 class="name">История изменений</h2>
+		
+		<section class="audit">
+			<table>
+				<thead>
+				<tr>
+					<th class="column-3">Сотрудник</th>
+					<th class="column-3">Статус</th>
+					<th class="column-3">Дата</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr th:each="audit : ${audits}">
+					<td th:text="${audit.fullName()}"></td>
+					<td th:text="${audit.status().label}"></td>
+					<td th:text="${#temporals.format(audit.date(), 'yyyy-MM-dd HH:mm')}"></td>
+				</tr>
+				</tbody>
+			</table>
+		</section>
+	</main>
+</body>
+</html>

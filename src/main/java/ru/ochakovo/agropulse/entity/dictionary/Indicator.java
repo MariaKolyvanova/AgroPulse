@@ -14,16 +14,23 @@ import ru.ochakovo.agropulse.entity.BaseEntity;
 public class Indicator extends BaseEntity {
 
     @Column(nullable = false)
-    private String name;
+    private String indicatorName;
 
     @Column(unique = true, nullable = false)
     private String code;
 
-    private String category;
+    /**
+     * Родительский путь в XML: один тег или цепочка через «/» (например {@code Актив/ВнеОбА}).
+     * Зарезервированные значения только для выбора корня раздела: {@code ОТЧЕТ_ФИН_РЕЗ}, {@code ОТЧЕТ_ДВИЖ_ДЕН_СР}.
+     */
+    @Column(name = "parent_tag")
+    private String parentTag;
+
+    private String xmlTag;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "value_type", nullable = false)
-    private ValueType valueType;
+    @Column(name = "value_source", nullable = false)
+    private ValueSource valueSource;
 
     private String formula;
 

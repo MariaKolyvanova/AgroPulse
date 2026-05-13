@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="UTF-8">
+	<meta content="width=device-width, initial-scale=1" name="viewport">
+	<link rel="stylesheet" th:href="@{/css/styles.css}">
+	<link rel="stylesheet" th:href="@{/css/menu.css}">
+	<link rel="stylesheet" th:href="@{/css/user.css}">
+	<script th:src="@{/js/script.js}"></script>
+	<title>th:text="${user.id() == thisUser.id()? 'Личный кабинет' : 'Сотрудник'}"</title>
+	<link rel="icon" type="image/svg+xml" href="/images/icon.svg">
+	<link rel="alternate icon" href="/images/icon.ico">
+</head>
+<body>
+	<section class="menu" th:insert="~{menu :: menu}"></section>
+	<main class="content">
+		<h1 class="name" th:text="${user.id() == thisUser.id()? 'Личный кабинет' : 'Сотрудник'}">Сотрудник</h1>
+		<form method="post" th:action="@{/users/{id}(id=${thisUser.id()})}">
+			<section class="user block">
+				<div class="label-info">
+					<div class="label">
+						<span class="label">Фамилия:</span>
+						<span class="label">Имя:</span>
+						<span class="label">Отчество:</span>
+						<span class="label">Роль:</span>
+						<span class="label">Статус:</span>
+					</div>
+					
+					<div class="value this">
+						<span class="value" th:text="${thisUser.lastName()}"></span>
+						<span class="value" th:text="${thisUser.firstName()}"></span>
+						<span class="value" th:text="${thisUser.patronymic()}"></span>
+						<span class="value" th:text="${thisUser.role().label}"></span>
+						<span class="value" th:text="${thisUser.userStatus().label}"></span>
+					</div>
+					
+					<div class="value edit">
+						<input class="value" name="lastName" th:value="${thisUser.lastName()}" type="text">
+						<input class="value" name="firstName" th:value="${thisUser.firstName()}" type="text">
+						<input class="value" name="patronymic" th:value="${thisUser.patronymic()}" type="text">
+						<select class="value" id="role" name="role">
+							<option th:each="role : ${roles}"
+							        th:selected="${role == thisUser.role()}"
+							        th:text="${role.label}"
+							        th:value="${role.name()}">
+							</option>
+						</select>
+						<select class="value" id="userStatus" name="userStatus">
+							<option th:each="status : ${statuses}"
+							        th:selected="${status == thisUser.userStatus()}"
+							        th:text="${status.label}"
+							        th:value="${status.name()}">
+							</option>
+						</select>
+					</div>
+				</div>
+				
+				<div class="label-contact">
+					<div class="label">
+						<span class="label">Электронная почта:</span>
+						<span class="label">Пароль:</span>
+					</div>
+					
+					<div class="value this">
+						<span class="value" th:text="${thisUser.username()}"></span>
+						<span class="value"></span>
+					</div>
+					
+					<div class="value edit">
+						<input class="value" id="username" name="username" th:value="${thisUser.username()}"
+						       type="email">
+						<input class="value" id="password" name="password" type="text">
+					</div>
+				</div>
+				
+				<button class="button edit" onclick="buttonEdit()" type="button" sec:authorize="hasAuthority('ADMINISTRATOR')">Редактировать</button>
+				<button name="action" value="save"  class="button save" onclick="buttonSaveOrCancel()" type="submit">Сохранить</button>
+				<button name="action" value="cancel" class="button cancel" onclick="buttonSaveOrCancel()" type="submit">
+					Отменить</button>
+			</section>
+		</form>
+	</main>
+	
+</body>
+</html>

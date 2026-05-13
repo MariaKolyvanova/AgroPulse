@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" th:href="@{/css/styles.css}">
+	<link rel="stylesheet" th:href="@{/css/menu.css}">
+	<link rel="stylesheet" th:href="@{/css/user.css}">
+	<link rel="stylesheet" th:href="@{/css/users.css}">
+	<title>Новый сотрудник</title>
+	<link rel="icon" type="image/svg+xml" href="/images/icon.svg">
+	<link rel="alternate icon" href="/images/icon.ico">
+</head>
+<body>
+	<section class="menu" th:insert="~{menu :: menu}"></section>
+	<main class="content">
+		
+		<h1 class="name">Новый сотрудник</h1>
+		<form method="post" th:action="@{/users/newUser}">
+			<section class="user block">
+				<div class="label-info">
+					<div class="label">
+						<span class="label">Фамилия:</span>
+						<span class="label">Имя:</span>
+						<span class="label">Отчество:</span>
+						<span class="label">Роль:</span>
+						<span class="label">Статус:</span>
+					</div>
+					<div class="value">
+						<input class="value" name="lastName" type="text">
+						<input class="value" name="firstName" type="text">
+						<input class="value" name="patronymic" type="text">
+						<select class="value" id="role" name="role">
+							<option th:each="role : ${roles}"
+							        th:text="${role.label}"
+							        th:value="${role.name()}">
+							</option>
+						</select>
+						<select class="value" id="userStatus" name="userStatus">
+							<option th:each="status : ${statuses}"
+							        th:text="${status.label}"
+							        th:value="${status.name()}">
+							</option>
+						</select>
+					</div>
+				</div>
+				
+				<div class="label-contact">
+					<div class="label">
+						<span class="label">Электронная почта:</span>
+						<span class="label">Пароль:</span>
+					</div>
+					<div class="value">
+						<input class="value" id="username" name="username" type="email">
+						<input class="value" id="password" name="password" type="text">
+					</div>
+				</div>
+			</section>
+			<button class="button addUser" onclick="buttonSaveOrCancel()" type="submit">Добавить
+			</button>
+		</form>
+	</main>
+
+</body>
+</html>

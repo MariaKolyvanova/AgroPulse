@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Upload</title>
+	<link rel="stylesheet" th:href="@{/css/styles.css}">
+	<link rel="stylesheet" th:href="@{/css/menu.css}">
+	<link rel="stylesheet" th:href="@{/css/upload.css}">
+	<script defer th:src="@{/js/script.js}"></script>
+</head>
+<body>
+	<section class="menu" th:insert="~{menu :: menu}"></section>
+	<main class="content">
+		<h1 class="name">Загрузка отчётности</h1>
+
+		<section class="upload">
+			<form class="upload section" th:action="@{/operator/upload}" method="post" enctype="multipart/form-data">
+				<div class="block drop-zone">
+					<div id="uploadDropPane" class="grid">
+						<img src="/images/upload.svg" class="upload" alt="">
+						<p class="drop-zone-title">Перетащите xml-файл сюда</p>
+						<p class="drop-zone-or">или</p>
+						<label class="button file" for="fileInput">Выбрать xml-файл</label>
+						<input id="fileInput" name="file" type="file" accept=".xml,application/xml,text/xml" required>
+					</div>
+
+					<div id="uploadLoadedPane" class="grid uploaded upload-pane--loaded" hidden>
+						<img src="/images/uploaded.svg" class="upload uploaded" alt="">
+						<p id="uploadedFileLabel" class="drop-zone-title">Файл</p>
+					</div>
+				</div>
+
+				<section class="upload-panel block">
+					<h2 class="upload">Параметры отчёта</h2>
+
+					<div class="form-group">
+						<label class="form-text" for="reportName">Название отчёта</label>
+						<input id="reportName"
+						       class="form"
+							   name="reportName"
+							   type="text"
+							   placeholder="введите название отчёта"
+							   th:value="${report != null} ? ${report.reportName()} : ''"
+							   required>
+					</div>
+
+					<div class="form-group">
+						<label class="form-text">Период данных</label>
+						<div class="period-grid">
+							<select class="period placeholder" id="reportMonth" name="reportMonth" required>
+								<option value="" selected>месяц</option>
+								<option value="1">Январь</option>
+								<option value="2">Февраль</option>
+								<option value="3">Март</option>
+								<option value="4">Апрель</option>
+								<option value="5">Май</option>
+								<option value="6">Июнь</option>
+								<option value="7">Июль</option>
+								<option value="8">Август</option>
+								<option value="9">Сентябрь</option>
+								<option value="10">Октябрь</option>
+								<option value="11">Ноябрь</option>
+								<option value="12">Декабрь</option>
+							</select>
+
+							<select class="period placeholder" id="reportYear" name="reportYear" required>
+								<option value="" selected>год</option>
+								<option th:each="year : ${#numbers.sequence(2022, 2035)}"
+										th:value="${year}"
+										th:text="${year}"></option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-messages" th:if="${uploadError != null or successMessage != null}">
+						<p class="error-message" th:if="${uploadError != null}" th:text="${uploadError}"></p>
+						<p class="success-message" th:if="${successMessage != null}" th:text="${successMessage}"></p>
+					</div>
+
+					<button class="upload button" type="submit">Загрузить</button>
+				</section>
+			</form>
+		</section>
+	</main>
+</body>
+</html>

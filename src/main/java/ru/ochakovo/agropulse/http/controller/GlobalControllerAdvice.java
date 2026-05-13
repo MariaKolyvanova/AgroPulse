@@ -1,0 +1,4 @@
+package ru.ochakovo.agropulse.http.controller;
+
+public class GlobalControllerAdvice {
+}

@@ -24,4 +24,10 @@ public class IndicatorValue extends BaseEntity {
 
     @Column(nullable = false)
     private Double value;
+
+    /** Предыдущий период (баланс: СумПрдщ; ОФР: СумПред). */
+    private Double previousPeriodValue;
+
+    /** Позапрошлый период (баланс: СумПрдшв). */
+    private Double twoPeriodsAgoValue;
 }

@@ -28,3 +28,4 @@ CREATE TABLE IF NOT EXISTS users_aud
     PRIMARY KEY (id, rev),
     CONSTRAINT fk_users_aud_revinfo FOREIGN KEY (rev) REFERENCES revinfo (rev)
 );
+

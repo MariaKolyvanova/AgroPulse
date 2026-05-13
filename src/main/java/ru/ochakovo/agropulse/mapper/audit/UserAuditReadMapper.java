@@ -1,4 +1,4 @@
-package ru.ochakovo.agropulse.mapper;
+package ru.ochakovo.agropulse.mapper.audit;
 
 import org.mapstruct.Mapper;
 import ru.ochakovo.agropulse.dto.audit.UserAuditReadDto;

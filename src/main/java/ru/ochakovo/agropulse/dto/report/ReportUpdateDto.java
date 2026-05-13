@@ -1,4 +1,8 @@
 package ru.ochakovo.agropulse.dto.report;
 
-public class ReportEditDto {
+import ru.ochakovo.agropulse.entity.data.ReportStatus;
+
+public record ReportUpdateDto (
+        ReportStatus status
+){
 }

@@ -1,4 +1,9 @@
 package ru.ochakovo.agropulse.dto.report;
 
-public record InfoReportDto() {
+import java.util.List;
+
+public record InfoReportDto(
+        int size,
+        List<String> indicators
+) {
 }

@@ -1,4 +1,4 @@
-package ru.ochakovo.agropulse.mapper;
+package ru.ochakovo.agropulse.mapper.audit;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -16,7 +16,7 @@ public interface ReportAuditReadMapper {
     @Mapping(source = "company.id", target = "companyId")
     @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "report.id", target = "reportId")
-    @Mapping(source = "report.name", target = "reportName")
+    @Mapping(source = "report.reportName", target = "reportName")
     @Mapping(target = "fullName", expression = "java(buildFullName(reportAudit.getUser()))")
     ReportAuditReadDto map(ReportAudit reportAudit);
 

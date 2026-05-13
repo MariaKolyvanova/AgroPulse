@@ -1,4 +1,11 @@
 package ru.ochakovo.agropulse.dto.audit;
 
-public class UserAuditFilter {
+import java.time.LocalDate;
+
+public record UserAuditFilter (
+        String modifiedByFullName,
+        String modifiedUserFullName,
+        LocalDate from,
+        LocalDate to
+        ) {
 }

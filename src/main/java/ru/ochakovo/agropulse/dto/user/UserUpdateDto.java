@@ -1,4 +1,4 @@
-package ru.ochakovo.agropulse.dto;
+package ru.ochakovo.agropulse.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

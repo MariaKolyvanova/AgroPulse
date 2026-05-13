@@ -1,4 +1,4 @@
-package ru.ochakovo.agropulse.mapper;
+package ru.ochakovo.agropulse.mapper.user;
 
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;

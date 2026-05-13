@@ -1,11 +1,11 @@
-package ru.ochakovo.agropulse.dto;
+package ru.ochakovo.agropulse.dto.audit;
 
-import java.time.Instant;
+import java.time.LocalDate;
 
 public record AuthAuditFilter(
         String fullName,
         String ip,
-        Instant from,
-        Instant to
+        LocalDate from,
+        LocalDate to
 ) {
 }

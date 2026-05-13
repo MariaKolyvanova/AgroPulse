@@ -1,4 +1,4 @@
-package ru.ochakovo.agropulse.dto;
+package ru.ochakovo.agropulse.dto.user;
 
 import ru.ochakovo.agropulse.entity.organization.Role;
 import ru.ochakovo.agropulse.entity.organization.UserStatus;

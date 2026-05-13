@@ -1,4 +1,4 @@
-package ru.ochakovo.agropulse;
+package ru.ochakovo.agropulse.service.menu;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

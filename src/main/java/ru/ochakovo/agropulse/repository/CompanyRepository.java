@@ -17,4 +17,5 @@ public interface CompanyRepository
     Company getCompanyByName(String nameCompany);
 
     boolean existsById(Long idCompany);
+
 }

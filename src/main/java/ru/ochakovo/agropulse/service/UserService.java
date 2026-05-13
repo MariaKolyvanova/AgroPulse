@@ -3,102 +3,84 @@ package ru.ochakovo.agropulse.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.ochakovo.agropulse.dto.CreateCompanyDto;
-import ru.ochakovo.agropulse.dto.CreateUserDto;
-import ru.ochakovo.agropulse.dto.UpdateUserDto;
-import ru.ochakovo.agropulse.entity.organization.*;
+import ru.ochakovo.agropulse.dto.user.UserCreateDto;
+import ru.ochakovo.agropulse.dto.user.UserReadDto;
+import ru.ochakovo.agropulse.dto.user.UserUpdateDto;
+import ru.ochakovo.agropulse.entity.organization.User;
+import ru.ochakovo.agropulse.entity.organization.UserStatus;
+import ru.ochakovo.agropulse.mapper.user.UserCreateMapper;
+import ru.ochakovo.agropulse.mapper.user.UserReadMapper;
+import ru.ochakovo.agropulse.mapper.user.UserUpdateMapper;
 import ru.ochakovo.agropulse.repository.CompanyRepository;
 import ru.ochakovo.agropulse.repository.UserRepository;
 
+import java.util.List;
+import java.util.Optional;
+
+
 @RequiredArgsConstructor
 @Service
-public class UserManagementService {
+@Transactional(readOnly = true)
+public class UserService {
 
-    private final CompanyRepository companyRepository;
     private final UserRepository userRepository;
-    private final AuditLogService auditLogService;
-    private final CurrentUserService currentUserService;
+    private final UserReadMapper userReadMapper;
+    private final UserCreateMapper userCreateMapper;
+    private final UserUpdateMapper userUpdateMapper;
+    private final CompanyRepository companyRepository;
 
-    @Transactional
-    public void createCompany(CreateCompanyDto createCompanyDto, CreateUserDto createUserDto){
+    public List<UserReadDto> findAll(Long companyId){
+        return userRepository.findAllByCompanyId(companyId).stream()
+                .map(userReadMapper::map)
+                .toList();
+    }
 
-        if (companyRepository.existsByName(createCompanyDto.companyName())){
-            throw new IllegalStateException("Компания уже существует");
-        }
+//    public Page<UserReadDto> findAll(UserFilter filter, Pageable pageable){
+//        var predicate = QPredicates.builder()
+//                .add(filter.lastName(), user.lastName::containsIgnoreCase)
+//                .add(filter.firstName(), user.firstName::containsIgnoreCase)
+//                .add(filter.patronymic(), user.patronymic::containsIgnoreCase)
+//                .add(filter.role(), user.role::eq)
+//                .add(filter.userStatus(), user.userStatus::eq)
+//                .build();
+//
+//        return userRepository.findAll(predicate, pageable)
+//                .map(userReadMapper::map);
+//    }
 
-        Company company = companyRepository.save(
-                Company
-                .builder()
-                .name(createCompanyDto.companyName())
-                .region(createCompanyDto.region())
-                .industry(createCompanyDto.industry())
-                .build());
-
-        createUser(createUserDto);
-
-        auditLogService.log(EntityType.COMPANY, company.getName(), AuditAction.CREATE, "Создана компания " + company.getName());
-
+    public UserReadDto findById(Long id) {
+        return userRepository.findById(id)
+                .map(userReadMapper::map).orElseThrow();
     }
 
     @Transactional
-    public User createUser(CreateUserDto createUserDto){
+    public UserReadDto create(UserCreateDto userCreateDto, Long companyId){
 
-        if (userRepository.existsByEmail(createUserDto.email())) {
-            throw new IllegalStateException("Логин уже занят");
+        User user = userCreateMapper.map(userCreateDto);
+        user.setCompany(companyRepository.getCompanyById(companyId));
+        if (user.getUserStatus() == null) {
+            user.setUserStatus(UserStatus.ACTIVE);
         }
+        userRepository.save(user);
 
-        User user = userRepository.save(
-                User
-                        .builder()
-                        .email(createUserDto.email())
-                        .password(createUserDto.password())
-                        .fullName(createUserDto.fullName())
-                        .company(currentUserService.getCurrentCompany())
-                        .role(createUserDto.role())
-                        .userStatus(UserStatus.ACTIVE)
-                        .build());
 
-        auditLogService.log(EntityType.USER, user.getFullName(), AuditAction.CREATE, "Создан пользователь " + user.getFullName());
-        return user;
+        return userReadMapper.map(user);
     }
 
     @Transactional
-    public User updateUser(Long userId, UpdateUserDto dto){
-        validateUserExists(userId);
+    public Optional<UserReadDto> update(Long userId, UserUpdateDto dto) {
 
-        User user = userRepository.findUserById(userId);
-
-        String changes = "";
-
-        if (dto.role() != null){
-            changes += "роль: " + user.getRole() + " -> " + dto.role() + "; ";
-            user.setRole(dto.role());
-        }
-        if (dto.email() != null){
-            changes += "email: " + user.getEmail() + " -> " + dto.email() + "; ";
-            user.setEmail(dto.email());
-        }
-        if (dto.password() != null){
-            changes += "пароль изменён; ";
-            user.setPassword(dto.password());
-        }
-        if (dto.fullName() != null){
-            changes += "ФИО: " + user.getFullName() + " -> " + dto.fullName() + "; ";
-            user.setFullName(dto.fullName());
-        }
-        if (dto.userStatus() != null){
-            changes += "статус: " + user.getUserStatus() + " -> " + dto.userStatus() + "; ";
-            user.setUserStatus(dto.userStatus());
-        }
-
-        auditLogService.log(EntityType.USER, user.getFullName(), AuditAction.UPDATE, changes);
-
-        return user;
+        return userRepository.findById(userId)
+                .map(user -> {
+                    userUpdateMapper.map(dto, user);
+                    return userReadMapper.map(user);
+                });
     }
 
-    public void validateUserExists(Long userId){
-        if (!userRepository.existsById(userId)){
-            throw new IllegalStateException("Пользователь не найден");
-        }
+
+    public Optional<UserReadDto> findByUsername(String username){
+        return userRepository.findByUsername(username).map(userReadMapper::map);
     }
+
 }
+

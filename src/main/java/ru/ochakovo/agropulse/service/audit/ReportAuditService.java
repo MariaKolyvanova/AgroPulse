@@ -1,12 +1,12 @@
-package ru.ochakovo.agropulse.service;
+package ru.ochakovo.agropulse.service.audit;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 import ru.ochakovo.agropulse.dto.audit.ReportAuditFilter;
 import ru.ochakovo.agropulse.dto.audit.ReportAuditReadDto;
 import ru.ochakovo.agropulse.entity.audit.ReportAudit;

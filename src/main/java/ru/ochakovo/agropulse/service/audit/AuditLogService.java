@@ -1,4 +1,4 @@
-package ru.ochakovo.agropulse.service;
+package ru.ochakovo.agropulse.service.audit;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

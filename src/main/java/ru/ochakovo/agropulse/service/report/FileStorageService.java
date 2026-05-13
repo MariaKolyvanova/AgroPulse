@@ -1,4 +1,4 @@
-package ru.ochakovo.agropulse.service;
+package ru.ochakovo.agropulse.service.report;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

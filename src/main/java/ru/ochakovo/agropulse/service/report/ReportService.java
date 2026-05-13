@@ -1,4 +1,4 @@
-package ru.ochakovo.agropulse.service;
+package ru.ochakovo.agropulse.service.report;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,7 +21,7 @@ import ru.ochakovo.agropulse.mapper.report.ReportCreateMapper;
 import ru.ochakovo.agropulse.mapper.report.ReportReadMapper;
 import ru.ochakovo.agropulse.querydsl.QPredicates;
 import ru.ochakovo.agropulse.repository.*;
-import ru.ochakovo.agropulse.service.report.FinancialReportIndicatorImportService;
+import ru.ochakovo.agropulse.service.audit.ReportAuditService;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;

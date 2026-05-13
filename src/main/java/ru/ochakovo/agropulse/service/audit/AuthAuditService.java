@@ -1,11 +1,11 @@
-package ru.ochakovo.agropulse.service;
+package ru.ochakovo.agropulse.service.audit;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import ru.ochakovo.agropulse.dto.audit.AuthAuditFilter;
 import ru.ochakovo.agropulse.dto.audit.AuthAuditReadDto;
 import ru.ochakovo.agropulse.entity.audit.AuthAudit;

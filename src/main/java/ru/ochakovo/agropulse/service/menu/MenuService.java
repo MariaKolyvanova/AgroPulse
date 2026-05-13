@@ -1,7 +1,6 @@
-package ru.ochakovo.agropulse.service;
+package ru.ochakovo.agropulse.service.menu;
 
 import org.springframework.stereotype.Component;
-import ru.ochakovo.agropulse.MenuItem;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package ru.ochakovo.agropulse.dto;
+package ru.ochakovo.agropulse;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

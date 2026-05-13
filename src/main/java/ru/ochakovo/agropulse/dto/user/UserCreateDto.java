@@ -5,9 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import ru.ochakovo.agropulse.entity.organization.Role;
 import ru.ochakovo.agropulse.entity.organization.UserStatus;
-import ru.ochakovo.agropulse.validation.UserInfo;
 
-@UserInfo
 public record UserCreateDto(
         Role role,
 

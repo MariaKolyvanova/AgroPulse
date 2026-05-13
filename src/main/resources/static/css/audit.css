@@ -1,0 +1,123 @@
+div.filter {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+input.filter, select.filter {
+    width: 150px;
+    height: 50px;
+    border: 1px solid var(--color-border);
+    padding: 0 15px;
+    font-size: 16px;
+    color: black;
+    border-radius: 10px;
+    text-align: left;
+}
+
+.filter.fullName {
+    width: 355px;
+}
+
+.filter.reports.fullName {
+    width: 200px;
+}
+
+div.pageable {
+    display: inline-flex;
+    line-height: 30px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+div.page {
+    position: absolute;
+    right: 0;
+    gap: 10px;
+}
+
+div.shown {
+    position: absolute;
+    right: 0;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+select.period {
+    height: 30px;
+    min-width: 40px;
+    max-width: 50px;
+    padding: 0 5px;
+    border-radius: 10px;
+    border: 1px solid var(--color-border);
+}
+
+div.size {
+    gap: 10px;
+
+}
+
+.button.pageable {
+    width: 150px;
+}
+
+.filter.modifiedUserFullName, .filter.modifiedByFullName{
+    width: 245px;
+}
+
+div.tabs {
+    padding: 10px 0;
+    border-radius: 10px;
+    background-color: #F3F4F6;
+    margin-bottom: 30px;
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+a.tabs {
+    width: 300px;
+    height: 40px;
+    text-align: center;
+    border-radius: 10px;
+    font-size: 16px;
+    line-height: 40px;
+    display: inline-block;
+}
+
+a.tabs.active {
+    background-color: white;
+    color: var(--color-primary);
+}
+
+a.tabs:hover {
+    color: var(--color-primary);
+}
+
+input.filter.date {
+    width: 150px;
+}
+
+select.placeholder:has(option[value=""]:checked) {
+    color: gray;
+}
+
+select.placeholder:not(:has(option[value=""]:checked)) {
+    color: black;
+}
+
+input.filter.nameReport {
+    width: 300px;
+}
+
+select.size, select.page {
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 5px;
+    line-height: 40px;
+}
+
+select.status {
+    width: 200px;
+}

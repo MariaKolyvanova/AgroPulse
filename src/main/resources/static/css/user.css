@@ -1,0 +1,75 @@
+section.user {
+    display: inline-flex;
+    width: 100%;
+}
+
+div.label {
+    display: inline;
+}
+
+span.label {
+    display: block;
+    color: var(--color-secondary-text);
+    margin-bottom: 10px;
+    line-height: 30px;
+}
+
+div.value {
+    display: inline;
+    margin-left: 60px;
+}
+
+span.value, input.value, select.value {
+    display: block;
+    margin-bottom: 10px;
+    line-height: 30px;
+    width: 200px;
+    padding: 0 5px;
+    font-size: var(--text-body-size);
+    font-weight: 400;
+}
+
+input.value, select.value {
+
+    height: 30px;
+    border-radius: 10px;
+    border: 1px solid var(--color-border);
+}
+
+.label-info {
+    display: flex;
+}
+
+.label-contact {
+    margin-left: 120px;
+    display: flex;
+}
+
+button.edit {
+    position: absolute;
+    right: 0;
+    bottom: -80px;
+}
+
+button.save {
+    position: absolute;
+    right: 0;
+    bottom: -80px;
+    display: none;
+    background-color: var(--color-green);
+}
+
+button.cancel {
+    position: absolute;
+    right: 300px;
+    bottom: -80px;
+    display: none;
+    border: none;
+    background-color: var(--body-background-color);
+    color: var(--color-secondary-text);
+    width: 100px;
+}
+
+div.edit, span.password {
+    display: none;
+}

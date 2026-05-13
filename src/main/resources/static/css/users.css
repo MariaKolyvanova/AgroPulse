@@ -1,0 +1,18 @@
+.status-ACTIVE {
+    color: green;
+}
+
+.status-BLOCKED {
+    color: red;
+}
+
+tr:hover td{
+    cursor: pointer;
+    background-color: var(--color-primary-very-light);
+}
+
+.addUser{
+    position: absolute;
+    right: 0;
+    bottom: -80px;
+}

@@ -8,6 +8,9 @@ function buttonEdit() {
     document.querySelectorAll('div.edit').forEach(el => {
         el.style.display = 'inline';
     });
+    document.querySelectorAll('span.password').forEach(el => {
+        el.style.display = 'inline';
+    });
 
 }
 
@@ -19,6 +22,9 @@ function buttonSaveOrCancel() {
         el.style.display = 'inline';
     });
     document.querySelectorAll('div.edit').forEach(el => {
+        el.style.display = 'none';
+    });
+    document.querySelectorAll('span.password').forEach(el => {
         el.style.display = 'none';
     });
 
@@ -46,3 +52,37 @@ function tabs(activeTab) {
         }
     }
 }
+
+function create() {
+    const input = document.getElementById('fileInput');
+    const drop = document.getElementById('createDropPane');
+    const loaded = document.getElementById('createLoadedPane');
+    const label = document.getElementById('createdFileLabel');
+    if (!input || !drop || !loaded) return;
+    const file = input.files?.[0];
+    const ok = !!file?.name;
+    drop.style.display = ok ? 'none' : 'flex';
+    loaded.style.display = ok ? 'flex' : 'none';
+    if (label && ok) label.textContent = file.name;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const input = document.getElementById('fileInput');
+    const zone = document.querySelector('.drop-zone');
+    if (!input || !zone) return;
+
+    const stop = (e) => { e.preventDefault(); e.stopPropagation(); };
+    ['dragenter', 'dragover', 'dragleave'].forEach((ev) => zone.addEventListener(ev, stop));
+    zone.addEventListener('drop', (e) => {
+        stop(e);
+        const file = e.dataTransfer?.files?.[0];
+        if (!file) return;
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        input.files = dt.files;
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+
+    input.addEventListener('change', create);
+    create();
+});

@@ -9,17 +9,18 @@ public class MenuService {
 
     public List<MenuItem> getMenu(String role){
         List<MenuItem> items = List.of(
-                new MenuItem("ADMINISTRATOR", "main", "/admin/main", "Главная"),
-                new MenuItem("ADMINISTRATOR", "users", "/admin/users", "Сотрудники"),
-                new MenuItem("ADMINISTRATOR", "audit", "/admin/audit", "Журнал аудита"),
+                new MenuItem("ADMINISTRATOR", "main", "/companies/main", "Главная"),
+                new MenuItem("ADMINISTRATOR", "users", "/users", "Сотрудники"),
+                new MenuItem("ADMINISTRATOR", "reports", "/reports", "Отчёты"),
+                new MenuItem("ADMINISTRATOR", "audit", "/audit", "Журнал аудита"),
 
-                new MenuItem("OPERATOR", "create", "/operator/create", "Создание"),
-                new MenuItem("OPERATOR", "reports", "/operator/reports", "Отчёты"),
+                new MenuItem("OPERATOR", "create", "/reports/create", "Создание"),
+                new MenuItem("OPERATOR", "reports", "/reports", "Отчёты"),
 
-                new MenuItem("ANALYTIC", "calculation", "/analytic/calculation", "Расчёты"),
-                new MenuItem("ANALYTIC", "analytic", "/analytic/analytic", "Аналитика"),
-                new MenuItem("ANALYTIC", "archive", "/analytic/archive", "Архив"),
-                new MenuItem("ANALYTIC", "export", "/analytic/export", "Формирование")
+                new MenuItem("ANALYTIC", "calculation", "/reports/calculation", "Расчёты"),
+                new MenuItem("ANALYTIC", "analytic", "/reports/analytic", "Аналитика"),
+                new MenuItem("ANALYTIC", "reports", "/reports", "Отчёты"),
+                new MenuItem("ANALYTIC", "export", "/reports/export", "Формирование")
                                       );
 
         return items.stream()

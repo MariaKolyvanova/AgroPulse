@@ -10,13 +10,13 @@
 	<link rel="stylesheet" th:href="@{/css/audit.css}">
 </head>
 <body>
-	<section class="menu" th:insert="~{menu :: menu}"></section>
+	<section class="menu" th:insert="~{fragments/menu :: menu}"></section>
 	<main class="content">
 		
 		<h1 class="name">Отчёты</h1>
 		
 		<section class="reports">
-			<form th:action="@{/operator/reports}">
+			<form th:action="@{/reports}">
 				<div class="filter">
 					<input class="filter nameReport" name="reportName" placeholder="Название документа"
 					       th:value="${reportFilter.reportName()}"
@@ -88,7 +88,7 @@
 					<tr th:each="report : ${reports.content}">
 						<td>
 							<a class="link"
-							   th:href="@{'/operator/reports/' + ${report.id()}}"
+							   th:href="@{'/reports/' + ${report.id()}}"
 							   th:text="${report.reportName()}">Очет</a>
 						</td>
 						<td th:text="${report.status().label}"></td>

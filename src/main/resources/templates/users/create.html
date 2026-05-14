@@ -11,11 +11,11 @@
 	<link rel="alternate icon" href="/images/icon.ico">
 </head>
 <body>
-	<section class="menu" th:insert="~{menu :: menu}"></section>
+	<section class="menu" th:insert="~{fragments/menu :: menu}"></section>
 	<main class="content">
 		
 		<h1 class="name">Новый сотрудник</h1>
-		<form method="post" th:action="@{/users/newUser}">
+		<form method="post" th:action="@{/users/create}">
 			<section class="user block">
 				<div class="label-info">
 					<div class="label">
@@ -51,7 +51,7 @@
 					</div>
 					<div class="value">
 						<input class="value" id="username" name="username" type="email">
-						<input class="value" id="password" name="password" type="text">
+						<input class="value" id="password" name="password" type="password">
 					</div>
 				</div>
 			</section>

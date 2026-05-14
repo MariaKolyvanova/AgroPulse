@@ -22,6 +22,23 @@ public class GlobalControllerAdvice {
     private final CompanyService companyService;
     private final MenuService menuService;
 
+//    @ModelAttribute
+//    public void addUserAndCompany(Model model, Authentication auth) {
+//
+//        if (!(auth.getPrincipal() instanceof CustomUserDetails principal)) {
+//            return;
+//        }
+//
+//        model.addAttribute("user", principal);
+//
+//        if (principal.getCompanyId() != null) {
+//            model.addAttribute(
+//                    "company",
+//                    companyService.findById(principal.getCompanyId())
+//                              );
+//        }
+//    }
+
     @ModelAttribute
     public void addUserAndCompany(Model model) {
 
@@ -37,8 +54,7 @@ public class GlobalControllerAdvice {
             model.addAttribute("user", user);
 
             if (user.companyId() != null) {
-                companyService.findById(user.companyId())
-                        .ifPresent(company -> model.addAttribute("company", company));
+                model.addAttribute("company", companyService.findById(user.companyId()));
             }
         });
     }

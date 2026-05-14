@@ -27,7 +27,6 @@ import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -50,10 +49,10 @@ public class ReportService {
 
     private static final Set<String> ALLOWED_EXTENSIONS = Set.of(".xml");
 
-    public Optional<ReportReadDto> findByIdForCompany(Long id) {
+    public ReportReadDto findByIdForCompany(Long id) {
 
         return reportRepository.findById(id)
-                .map(reportReadMapper::map);
+                .map(reportReadMapper::map).orElseThrow();
     }
 
     @Transactional

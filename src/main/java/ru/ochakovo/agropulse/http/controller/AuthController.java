@@ -27,7 +27,7 @@ public class AuthController {
         model.addAttribute("user", user);
         model.addAttribute("company", company);
 
-        return "/auth/registration";
+        return "auth/registration";
     }
 
     @PostMapping("/registration")
@@ -53,7 +53,7 @@ public class AuthController {
 
     @GetMapping("/login")
     public String login(){
-        return "/auth/login";
+        return "auth/login";
     }
 
 }

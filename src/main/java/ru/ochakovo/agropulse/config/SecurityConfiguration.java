@@ -9,8 +9,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import ru.ochakovo.agropulse.http.handler.CustomAuthenticationSuccessHandler;
 
-import static ru.ochakovo.agropulse.entity.organization.Role.*;
-
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfiguration {
@@ -35,11 +33,6 @@ public class SecurityConfiguration {
                                         "/js/**",
                                         "/images/**"
                                         ).permitAll()
-
-                        .requestMatchers("/admin/**").hasAuthority(ADMINISTRATOR.getAuthority())
-                        .requestMatchers("/operator/**").hasAuthority(OPERATOR.getAuthority())
-                        .requestMatchers("/analytic/**").hasAuthority(ANALYTIC.getAuthority())
-
                         .anyRequest().authenticated()
                 );
 

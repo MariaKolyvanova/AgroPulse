@@ -23,13 +23,13 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         String redirectUrl = "/";
 
         if (authorities.stream().anyMatch(a -> a.getAuthority().equals(ADMINISTRATOR.getAuthority()))) {
-            redirectUrl = "/admin/main";
+            redirectUrl = "/companies/main";
         }
         else if (authorities.stream().anyMatch(a -> a.getAuthority().equals(OPERATOR.getAuthority()))) {
-            redirectUrl = "/operator/create";
+            redirectUrl = "/reports/create";
         }
         else if (authorities.stream().anyMatch(a -> a.getAuthority().equals(ANALYTIC.getAuthority()))) {
-            redirectUrl = "/analytic/calculation";
+            redirectUrl = "/reports/calculation";
         }
 
         response.sendRedirect(redirectUrl);

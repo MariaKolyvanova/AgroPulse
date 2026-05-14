@@ -12,7 +12,7 @@
 	<link rel="alternate icon" href="/images/icon.ico">
 </head>
 <body>
-	<section class="menu" th:insert="~{menu :: menu}"></section>
+	<section class="menu" th:insert="~{fragments/menu :: menu}"></section>
 	<main class="content">
 		<h1 class="name" th:text="${user.id() == thisUser.id()? 'Личный кабинет' : 'Сотрудник'}">Сотрудник</h1>
 		<form method="post" th:action="@{/users/{id}(id=${thisUser.id()})}">
@@ -75,7 +75,7 @@
 				
 				<button class="button edit" onclick="buttonEdit()" type="button" sec:authorize="hasAuthority('ADMINISTRATOR')">Редактировать</button>
 				<button name="action" value="save"  class="button save" onclick="buttonSaveOrCancel()" type="submit">Сохранить</button>
-				<button name="action" value="cancel" class="button cancel" onclick="buttonSaveOrCancel()" type="submit">
+				<button name="action" value="cancel" class="button cancel" onclick="buttonSaveOrCancel()" type="button">
 					Отменить</button>
 			</section>
 		</form>

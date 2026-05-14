@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Главня</title>
+	<link href="/images/icon.svg" rel="icon" type="image/svg+xml">
+	<link href="/images/icon.ico" rel="alternate icon">
+	<link rel="stylesheet" th:href="@{/css/styles.css}">
+	<link rel="stylesheet" th:href="@{/css/menu.css}">
+	<link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+	<section class="menu" th:insert="~{fragments/menu :: menu}"></section>
+	<main class="content">
+		
+		<h1 class="name">Главная</h1>
+		
+		<section class="block main">
+			
+				<img src="/images/company.svg" alt="" class="main">
+				
+				<div class="label-main">
+					<span class="value company" th:text="${company.name()}"></span>
+					
+					<span class="label">Регион</span>
+					<span class="value" th:text="${company.region()}"></span>
+					
+					<span class="label">Индустрия</span>
+					<span class="value" th:text="${company.industry()}"></span>
+				</div>
+			
+		</section>
+		
+		<section class="info">
+			
+			<div class="block label-info">
+				<img alt="" src="/images/menu/users.svg" class="info">
+				<div class="label-value">
+					<span class="info label">Всего сотрудников</span>
+					<span class="info value userSize" th:text="${info.usersSize()}"></span>
+					<span class="value status-active" th:text="${info.usersActiveSize()} + ' активных'"></span>
+				</div>
+			</div>
+			
+			<div class="block label-info">
+				<img alt="" src="/images/menu/reports.svg" class="info">
+				<div class="label-value">
+					<span class="info label">Всего отчётов</span>
+					<span class="info value" th:text="${info.reportsSize()}"></span>
+				</div>
+			</div>
+		</section>
+	
+	</main>
+</body>
+</html>

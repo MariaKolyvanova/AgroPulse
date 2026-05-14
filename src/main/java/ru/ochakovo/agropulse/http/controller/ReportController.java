@@ -23,18 +23,18 @@ import ru.ochakovo.agropulse.service.report.ReportService;
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 
-
-@RequestMapping("/operator")
+@RequestMapping("/reports")
 @Controller
 @RequiredArgsConstructor
-public class OperatorController {
+public class ReportController {
+
     private final ReportService reportService;
     private final UserService userService;
     private final ReportAuditService reportAuditService;
 
     @GetMapping("/create")
     public String create(){
-        return "/operator/create";
+        return "/users/create";
     }
 
     @PostMapping("/create")
@@ -44,7 +44,7 @@ public class OperatorController {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("reportErrors", bindingResult.getAllErrors());
             redirectAttributes.addFlashAttribute("report", report);
-            return "redirect:/operator/create";
+            return "redirect:/users/create";
         }
 
         var currentUser = userService.findByUsername(auth.getName()).orElseThrow();
@@ -55,16 +55,16 @@ public class OperatorController {
         } catch (IllegalArgumentException ex) {
             redirectAttributes.addFlashAttribute("createError", ex.getMessage());
             redirectAttributes.addFlashAttribute("report", report);
-            return "redirect:/operator/create";
+            return "redirect:/reports/create";
         } catch (XMLStreamException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return "redirect:/operator/reports/" + newReport.id();
+        return "redirect:/reports/" + newReport.id();
     }
 
-    @GetMapping("/reports")
+    @GetMapping
     public String reports(Model model, ReportFilter reportFilter, Pageable pageable) {
 
         Page<ReportReadDto> page = reportService.findAll(reportFilter, pageable);
@@ -72,16 +72,35 @@ public class OperatorController {
         model.addAttribute("reportFilter", reportFilter);
         model.addAttribute("statuses", ReportStatus.values());
 
-        return "general/reports";
+        return "reports/reports";
     }
 
-    @GetMapping("/reports/{id}")
+    @GetMapping("/{id}")
     public String report(Model model, @PathVariable Long id, Authentication auth) {
 
         model.addAttribute("report", reportService.findByIdForCompany(id));
         model.addAttribute("audits", reportAuditService.findAllById(id));
         model.addAttribute("info", reportService.getInfo(id));
 
-        return "/general/report";
+        return "reports/report";
+    }
+
+
+    @GetMapping("calculation")
+    public String calculation() {
+
+        return "reports/calculation";
+    }
+
+    @GetMapping("/analytic")
+    public String analytic() {
+
+        return "reports/analytic";
+    }
+
+    @GetMapping("/export")
+    public String export() {
+
+        return "reports/export";
     }
 }

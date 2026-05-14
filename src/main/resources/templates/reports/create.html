@@ -11,12 +11,12 @@
 	<script defer th:src="@{/js/script.js}"></script>
 </head>
 <body>
-	<section class="menu" th:insert="~{menu :: menu}"></section>
+	<section class="menu" th:insert="~{fragments/menu :: menu}"></section>
 	<main class="content">
 		<h1 class="name">Создание отчёта</h1>
 
 		<section class="create">
-			<form class="create section" th:action="@{/operator/create}" method="post" enctype="multipart/form-data">
+			<form class="create section" th:action="@{/reports/create}" method="post" enctype="multipart/form-data">
 				<div class="block drop-zone">
 					<div id="createDropPane" class="grid">
 						<img src="/images/upload.svg" class="create" alt="">

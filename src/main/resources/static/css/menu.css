@@ -1,8 +1,22 @@
+div.icon {
+    display: flex;
+}
+
+img.icon {
+    width: 42px;
+    height: 42px;
+}
+
 
 h1.company-name {
     font-family: var(--font-family);
     font-weight: 700;
-    color: var(--color-primary);
+    background: linear-gradient(180deg, #84c247 0%, #358323 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-left: 15px;
+    line-height: 42px;
 }
 
 section.menu {

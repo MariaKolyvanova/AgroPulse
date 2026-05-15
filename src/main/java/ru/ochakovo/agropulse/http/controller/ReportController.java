@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,7 +15,6 @@ import ru.ochakovo.agropulse.dto.report.ReportCreateDto;
 import ru.ochakovo.agropulse.dto.report.ReportFilter;
 import ru.ochakovo.agropulse.dto.report.ReportReadDto;
 import ru.ochakovo.agropulse.entity.data.ReportStatus;
-import ru.ochakovo.agropulse.service.UserService;
 import ru.ochakovo.agropulse.service.audit.ReportAuditService;
 import ru.ochakovo.agropulse.service.report.ReportService;
 
@@ -29,25 +27,23 @@ import java.io.IOException;
 public class ReportController {
 
     private final ReportService reportService;
-    private final UserService userService;
     private final ReportAuditService reportAuditService;
 
     @GetMapping("/create")
     public String create(){
-        return "/users/create";
+        return "/reports/create";
     }
 
     @PostMapping("/create")
     public String create(@RequestParam MultipartFile file, @Valid @ModelAttribute ReportCreateDto report,
-                         BindingResult bindingResult, Authentication auth, RedirectAttributes redirectAttributes) {
+                         BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("reportErrors", bindingResult.getAllErrors());
             redirectAttributes.addFlashAttribute("report", report);
-            return "redirect:/users/create";
+            return "redirect:/reports/create";
         }
 
-        var currentUser = userService.findByUsername(auth.getName()).orElseThrow();
         ReportReadDto newReport;
         try {
             newReport = reportService.create(file, report);
@@ -76,15 +72,14 @@ public class ReportController {
     }
 
     @GetMapping("/{id}")
-    public String report(Model model, @PathVariable Long id, Authentication auth) {
+    public String report(Model model, @PathVariable Long id) {
 
-        model.addAttribute("report", reportService.findByIdForCompany(id));
+        model.addAttribute("report", reportService.findById(id));
         model.addAttribute("audits", reportAuditService.findAllById(id));
         model.addAttribute("info", reportService.getInfo(id));
 
         return "reports/report";
     }
-
 
     @GetMapping("calculation")
     public String calculation() {

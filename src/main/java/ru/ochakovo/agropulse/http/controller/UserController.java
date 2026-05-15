@@ -2,7 +2,6 @@ package ru.ochakovo.agropulse.http.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -10,10 +9,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.ochakovo.agropulse.dto.user.UserCreateDto;
-import ru.ochakovo.agropulse.dto.user.UserReadDto;
 import ru.ochakovo.agropulse.dto.user.UserUpdateDto;
 import ru.ochakovo.agropulse.entity.organization.Role;
 import ru.ochakovo.agropulse.entity.organization.UserStatus;
+import ru.ochakovo.agropulse.security.CustomUserDetails;
 import ru.ochakovo.agropulse.service.UserService;
 
 @Slf4j
@@ -25,7 +24,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/{id}")
-    public String user(Model model, @PathVariable Long id, Authentication auth){
+    public String user(Model model, @PathVariable Long id){
 
         model.addAttribute("thisUser", userService.findById(id));
         model.addAttribute("roles", Role.values());
@@ -36,10 +35,9 @@ public class UserController {
     }
 
     @GetMapping
-    public String users(Model model, Authentication auth) {
-        UserReadDto currentUser = userService.findByUsername(auth.getName()).orElseThrow();
+    public String users(Model model) {
 
-        model.addAttribute("users", userService.findAll(currentUser.companyId()));
+        model.addAttribute("users", userService.findAll(CustomUserDetails.requireCurrent().getCompanyId()));
 
         return "users/users";
     }
@@ -55,7 +53,7 @@ public class UserController {
 
     @PostMapping("/newUser")
     public String create(@ModelAttribute @Validated UserCreateDto newUser, BindingResult bindingResultUser,
-                         RedirectAttributes redirectAttributes, Authentication auth) {
+                         RedirectAttributes redirectAttributes) {
 
         if (bindingResultUser.hasErrors()) {
             redirectAttributes.addFlashAttribute("newUser", newUser);
@@ -63,9 +61,10 @@ public class UserController {
             return "redirect:/users/create";
         }
 
-        Long companyId = userService.findByUsername(auth.getName()).get().companyId();
+        Long companyId = CustomUserDetails.requireCurrent().getCompanyId();
+
         userService.create(newUser, companyId);
-        Long userId = userService.findByUsername(newUser.username()).get().id();
+        Long userId = userService.findByUsername(newUser.username()).id();
 
         return "redirect:/users/" + userId;
     }

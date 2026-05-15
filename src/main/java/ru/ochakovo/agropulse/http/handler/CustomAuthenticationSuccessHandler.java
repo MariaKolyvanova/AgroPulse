@@ -6,10 +6,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import ru.ochakovo.agropulse.security.CustomUserDetails;
 
 import java.io.IOException;
 
-import static ru.ochakovo.agropulse.entity.organization.Role.*;
+import static ru.ochakovo.agropulse.entity.organization.Role.ADMINISTRATOR;
+import static ru.ochakovo.agropulse.entity.organization.Role.ANALYTIC;
+import static ru.ochakovo.agropulse.entity.organization.Role.OPERATOR;
 
 @Component
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler{
@@ -19,17 +22,14 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
 
-        var authorities = authentication.getAuthorities();
         String redirectUrl = "/";
 
-        if (authorities.stream().anyMatch(a -> a.getAuthority().equals(ADMINISTRATOR.getAuthority()))) {
-            redirectUrl = "/companies/main";
-        }
-        else if (authorities.stream().anyMatch(a -> a.getAuthority().equals(OPERATOR.getAuthority()))) {
-            redirectUrl = "/reports/create";
-        }
-        else if (authorities.stream().anyMatch(a -> a.getAuthority().equals(ANALYTIC.getAuthority()))) {
-            redirectUrl = "/reports/calculation";
+        if (authentication.getPrincipal() instanceof CustomUserDetails details) {
+            redirectUrl = switch (details.getRole()) {
+                case ADMINISTRATOR -> "/companies/main";
+                case OPERATOR -> "/reports/create";
+                case ANALYTIC -> "/reports/calculation";
+            };
         }
 
         response.sendRedirect(redirectUrl);

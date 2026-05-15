@@ -19,7 +19,6 @@ public interface CompanyRepository extends JpaRepository<Company, Long>, Queryds
 
     boolean existsById(Long idCompany);
 
-
     @Query(value = """
                 SELECT
                 	(SELECT count(*) FROM reports r

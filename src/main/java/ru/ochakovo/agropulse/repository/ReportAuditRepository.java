@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface ReportAuditRepository extends JpaRepository<ReportAudit, Long>, QuerydslPredicateExecutor<ReportAudit> {
 
-    List<ReportAudit> getAllByReportId(Long id);
+    List<ReportAudit> findAllByReportIdAndCompanyId(Long id, Long companyId);
 }

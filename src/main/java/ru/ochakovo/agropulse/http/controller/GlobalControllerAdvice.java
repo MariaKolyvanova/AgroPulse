@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import ru.ochakovo.agropulse.security.CustomUserDetails;
 import ru.ochakovo.agropulse.service.CompanyService;
 import ru.ochakovo.agropulse.service.UserService;
 import ru.ochakovo.agropulse.service.menu.MenuItem;
@@ -22,23 +23,6 @@ public class GlobalControllerAdvice {
     private final CompanyService companyService;
     private final MenuService menuService;
 
-//    @ModelAttribute
-//    public void addUserAndCompany(Model model, Authentication auth) {
-//
-//        if (!(auth.getPrincipal() instanceof CustomUserDetails principal)) {
-//            return;
-//        }
-//
-//        model.addAttribute("user", principal);
-//
-//        if (principal.getCompanyId() != null) {
-//            model.addAttribute(
-//                    "company",
-//                    companyService.findById(principal.getCompanyId())
-//                              );
-//        }
-//    }
-
     @ModelAttribute
     public void addUserAndCompany(Model model) {
 
@@ -48,24 +32,29 @@ public class GlobalControllerAdvice {
             return;
         }
 
-        String username = auth.getName();
+        if (!(auth.getPrincipal() instanceof CustomUserDetails principal)) {
+            return;
+        }
 
-        userService.findByUsername(username).ifPresent(user -> {
-            model.addAttribute("user", user);
+        var user = userService.findById(principal.getUserId());
+        model.addAttribute("user", user);
 
-            if (user.companyId() != null) {
-                model.addAttribute("company", companyService.findById(user.companyId()));
-            }
-        });
+        if (user.companyId() != null) {
+            model.addAttribute("company", companyService.find());
+        }
     }
 
     @ModelAttribute("menuItems")
     public List<MenuItem> menuItems(Authentication auth) {
-        if (auth == null)
+        if (auth == null) {
             return null;
+        }
 
-        String role = auth.getAuthorities().iterator().next().getAuthority();
-        return menuService.getMenu(role);
+        if (!(auth.getPrincipal() instanceof CustomUserDetails principal)) {
+            return null;
+        }
+
+        return menuService.getMenu(principal.getRole().name());
     }
 
     @ModelAttribute("requestPath")

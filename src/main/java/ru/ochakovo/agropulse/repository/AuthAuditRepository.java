@@ -8,4 +8,5 @@ import ru.ochakovo.agropulse.entity.audit.AuthAudit;
 @Repository
 public interface AuthAuditRepository
         extends JpaRepository<AuthAudit, Long>, QuerydslPredicateExecutor<AuthAudit> {
+
 }

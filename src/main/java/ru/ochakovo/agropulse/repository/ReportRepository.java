@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository
 public interface ReportRepository  extends JpaRepository<Report, Long>, QuerydslPredicateExecutor<Report> {
 
-    Optional<Report> findByIdAndCompany_Id(Long id, Long companyId);
+    Optional<Report> findByIdAndCompanyId(Long id, Long companyId);
 
 }

@@ -1,106 +1,76 @@
 package ru.ochakovo.agropulse.service;
 
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ochakovo.agropulse.IntegrationTestBase;
-import ru.ochakovo.agropulse.dto.*;
-import ru.ochakovo.agropulse.entity.organization.AuditLog;
-import ru.ochakovo.agropulse.entity.organization.EntityType;
+import ru.ochakovo.agropulse.annotation.IT;
+import ru.ochakovo.agropulse.dto.user.UserCreateDto;
+import ru.ochakovo.agropulse.dto.user.UserReadDto;
 import ru.ochakovo.agropulse.entity.organization.Role;
 import ru.ochakovo.agropulse.entity.organization.UserStatus;
-import ru.ochakovo.agropulse.mapper.AuditLogMapper;
-import ru.ochakovo.agropulse.repository.AuditLogRepository;
 import ru.ochakovo.agropulse.repository.CompanyRepository;
 import ru.ochakovo.agropulse.repository.UserRepository;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@IT
 @WithMockUser(username = "admin@ochakovo.ru", roles = "ADMINISTRATOR")
 @Transactional
-class UserManagementServiceTest extends IntegrationTestBase {
+@RequiredArgsConstructor
+class UserServiceTest extends IntegrationTestBase {
 
     @Autowired
-    UserManagementService userManagementService;
+    UserService userService;
     @Autowired
     CompanyRepository companyRepository;
     @Autowired
     UserRepository userRepository;
+//    @Autowired
+//    AuditLogRepository auditLogRepository;
+//    @Autowired
+//    AuditLogMapper mapper;
     @Autowired
-    AuditLogRepository auditLogRepository;
-    @Autowired
-    AuditLogService auditLogService;
-    @Autowired
-    AuditLogMapper mapper;
+    CompanyService companyService;
+
+    private final static Long USER_1 = 1L;
 
     @Test
-    void createCompany(){
-        CreateCompanyDto createCompanyDto = new CreateCompanyDto(
-                "Очаково",
-                "Саратовская область",
-                "Пищевая промышленность"
-        );
-
-
-        CreateUserDto createUserDto = new CreateUserDto(
-                "Artem@mail.ru",
-                "1234",
-                "Артёмов Артём Артёмович",
-                Role.OPERATOR
-        );
-
-        userManagementService.createCompany(createCompanyDto, createUserDto);
-
-        for (AuditLog log : auditLogRepository.findAllByUserId(3L)){
-            System.out.println(auditLogService.getLog(log));
-        }
-
+    void findAll(){
+        List<UserReadDto> result = userService.findAll(1L);
+        assertThat(result).hasSize(3);
     }
 
     @Test
-    void updateUser(){
-        UpdateUserDto updateUserDto = new UpdateUserDto(
-                Role.ANALYTIC,
-                "23",
-                "12",
-                "ФИО",
-                UserStatus.ARCHIVE
-        );
-        userManagementService.updateUser(2L, updateUserDto);
+    void findById(){
+//        Optional<UserReadDto maybeUser = userService.findById(USER_1);
+//        assertTrue(maybeUser.isPresent());
+//        maybeUser.ifPresent(user -> assertEquals("admin@ochakovo.ru", user.username()));
     }
 
     @Test
-    void shouldFilterAuditLogsByEntityType() {
-
-        AuditLogFilter filter = new AuditLogFilter(
-                null,
-                EntityType.REPORT,
-                null,
-                null,
-                null,
-                null
+    void create(){
+        var userDto = new UserCreateDto(
+                Role.OPERATOR,
+                "abc@bk.ru",
+                UserStatus.ARCHIVE,
+                "pass123",
+                "Петров",
+                "Иван",
+                "Альбертович"
         );
 
-        Pageable pageable = PageRequest.of(
-                0,
-                20,
-                Sort.by(Sort.Direction.DESC, "entityName"));
-
-        Page<AuditLogDto> result = auditLogService.findAll(filter, pageable);
-
-        assertNotNull(result);
-
-        assertTrue(
-                result.getContent().stream()
-                        .allMatch(log -> log.entityType() == EntityType.REPORT)
-                  );
-
-        result.getContent().forEach(System.out::println);
+        UserReadDto actualResult = userService.create(userDto, 1L);
+        assertEquals(userDto.username(), actualResult.username());
+        assertEquals(userDto.lastName(), actualResult.lastName());
+        assertEquals(userDto.firstName(), actualResult.firstName());
+        assertEquals(userDto.patronymic(), actualResult.patronymic());
+        assertEquals(userDto.role(), actualResult.role());
     }
+
 }

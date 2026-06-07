@@ -3,10 +3,9 @@ package ru.ochakovo.agropulse.service.audit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.util.StringUtils;
 import ru.ochakovo.agropulse.dto.audit.ReportAuditFilter;
 import ru.ochakovo.agropulse.dto.audit.ReportAuditReadDto;
 import ru.ochakovo.agropulse.entity.audit.ReportAudit;
@@ -15,9 +14,9 @@ import ru.ochakovo.agropulse.entity.data.ReportStatus;
 import ru.ochakovo.agropulse.entity.organization.User;
 import ru.ochakovo.agropulse.mapper.audit.ReportAuditReadMapper;
 import ru.ochakovo.agropulse.querydsl.QPredicates;
-import ru.ochakovo.agropulse.repository.ReportAuditRepository;
-import ru.ochakovo.agropulse.repository.ReportRepository;
-import ru.ochakovo.agropulse.repository.UserRepository;
+import ru.ochakovo.agropulse.repository.audit.ReportAuditRepository;
+import ru.ochakovo.agropulse.security.CustomUserDetails;
+import ru.ochakovo.agropulse.util.AuditSorting;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,12 +30,12 @@ public class ReportAuditService {
 
     private final ReportAuditRepository reportAuditRepository;
     private final ReportAuditReadMapper reportAuditReadMapper;
-    private final ReportRepository reportRepository;
-    private final UserRepository userRepository;
 
     public Page<ReportAuditReadDto> findAll(ReportAuditFilter filter, Pageable pageable) {
+        Long companyId = CustomUserDetails.requireCurrent().getCompanyId();
 
         var predicate = QPredicates.builder()
+                .add(companyId, reportAudit.company.id::eq)
                 .add(filter.fullName(), fullName ->
                         reportAudit.user.lastName
                                 .concat(" ")
@@ -46,7 +45,8 @@ public class ReportAuditService {
                                 .containsIgnoreCase(fullName)
 
                 )
-                .add(filter.status(), reportAudit.status::eq)
+                .add(StringUtils.hasText(filter.status()) ? filter.status().trim() : null, status ->
+                        reportAudit.status.in(ReportStatus.matchingByLabel(status)))
                 .add(filter.reportName(), reportAudit.report.reportName::containsIgnoreCase)
                 .add(filter.from(), from ->
                         reportAudit.date.goe(from.atStartOfDay()))
@@ -54,21 +54,15 @@ public class ReportAuditService {
                         reportAudit.date.lt(to.plusDays(1).atStartOfDay()))
                 .build();
 
-        return reportAuditRepository.findAll(predicate, pageable).map(reportAuditReadMapper::map);
+        return reportAuditRepository.findAll(predicate, AuditSorting.byDateDesc(pageable, "date"))
+                .map(reportAuditReadMapper::map);
     }
 
     public List<ReportAuditReadDto> findAllById(Long id) {
-        return reportAuditRepository.getAllByReportId(id).stream()
-                .map(reportAuditReadMapper::map).toList();
-    }
+        Long companyId = CustomUserDetails.requireCurrent().getCompanyId();
 
-    /**
-     * История по отчёту только если отчёт принадлежит указанной компании (без утечки по id отчёта).
-     */
-    public List<ReportAuditReadDto> findAllByReportForCompany(Long reportId, Long companyId) {
-        reportRepository.findByIdAndCompany_Id(reportId, companyId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        return findAllById(reportId);
+        return reportAuditRepository.findAllByReportIdAndCompanyIdOrderByDateDesc(id, companyId).stream()
+                .map(reportAuditReadMapper::map).toList();
     }
 
     public void recordStatusChange(Report report, User user, ReportStatus status) {
@@ -81,14 +75,5 @@ public class ReportAuditService {
                         .date(LocalDateTime.now())
                         .build()
         );
-    }
-
-    /**
-     * То же по идентификаторам — удобно из контроллеров, где есть только id отчёта и пользователя.
-     */
-    public void recordStatusChange(Long reportId, Long userId, ReportStatus status) {
-        Report report = reportRepository.getReferenceById(reportId);
-        User user = userId != null ? userRepository.getReferenceById(userId) : null;
-        recordStatusChange(report, user, status);
     }
 }

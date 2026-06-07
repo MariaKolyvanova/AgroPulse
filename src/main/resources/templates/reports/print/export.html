@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Формирование PDF отчёта</title>
+	<link href="/images/icon.svg" rel="icon" type="image/svg+xml">
+	<link href="/images/icon.ico" rel="alternate icon">
+	<link rel="stylesheet" th:href="@{/css/styles.css}">
+	<link rel="stylesheet" th:href="@{/css/menu.css}">
+	<link rel="stylesheet" th:href="@{/css/reports/report.css}">
+	<link rel="stylesheet" th:href="@{/css/print/export.css}">
+</head>
+<body>
+	<section class="menu" th:insert="~{fragments/menu :: menu}"></section>
+	<main class="content">
+		<div th:replace="~{fragments/back :: back}"></div>
+
+		<h1 class="name">Формирование PDF отчёта</h1>
+
+		<section class="export">
+			<section class="block export-description">
+				<h2 class="export" th:text="${report.reportName()}"></h2>
+
+				<div class="label">
+					<span class="label">Дата создания</span>
+					<span class="value"
+					      th:text="${#temporals.format(report.createdAt(), 'HH:mm dd.MM.yyyy')}"></span>
+
+					<span class="label">Дата последнего изменения</span>
+					<span class="value"
+					      th:text="${#temporals.format(report.updatedAt(), 'HH:mm dd.MM.yyyy')}"></span>
+				</div>
+
+			</section>
+
+			<section class="block export-checkbox">
+				<h2 class="export">Включить разделы</h2>
+				<form class="export-form" id="exportPdfForm" method="get"
+				      th:action="@{/reports/{id}/pdf(id=${report.id()})}"
+				      th:attr="data-pdf-file-name=${pdfFileName}">
+					<div class="checkboxes">
+						<label class="checkbox">
+							<input checked class="checkbox export-option" data-param="esg" type="checkbox">
+							Показатели устойчивого развития (ESG)
+						</label>
+						<label class="checkbox">
+							<input checked class="checkbox export-option" data-param="tables" type="checkbox">
+							Сводная таблица
+						</label>
+						<label class="checkbox">
+							<input checked class="checkbox export-option" data-param="charts" type="checkbox">
+							Графики
+						</label>
+						<label class="checkbox">
+							<input checked class="checkbox export-option" data-param="recommendations" type="checkbox">
+							Рекомендации
+						</label>
+						<label class="checkbox">
+							<input checked class="checkbox export-option" data-param="comment" type="checkbox">
+							Комментарий аналитика
+						</label>
+					</div>
+					<button class="button checkbox" id="exportPdfSubmit" type="submit">Скачать PDF</button>
+				</form>
+			</section>
+		</section>
+	</main>
+	<script>
+		(function () {
+			var form = document.getElementById('exportPdfForm');
+			var button = document.getElementById('exportPdfSubmit');
+			if (!form || !button) {
+				return;
+			}
+
+			var defaultLabel = button.textContent;
+
+			function setPreparing(isPreparing) {
+				button.disabled = isPreparing;
+				button.classList.toggle('is-preparing', isPreparing);
+				button.textContent = isPreparing ? 'Подготовка отчёта' : defaultLabel;
+			}
+
+			function buildExportUrl() {
+				var url = new URL(form.action, window.location.origin);
+				form.querySelectorAll('.export-option').forEach(function (checkbox) {
+					url.searchParams.set(checkbox.getAttribute('data-param'), checkbox.checked ? 'true' : 'false');
+				});
+				return url.toString();
+			}
+
+			function defaultFileName() {
+				return form.getAttribute('data-pdf-file-name') || 'report.pdf';
+			}
+
+			function extractFileName(contentDisposition) {
+				if (contentDisposition) {
+					var starMatch = /filename\*=(?:UTF-8|utf-8)''([^;\n]+)/i.exec(contentDisposition);
+					if (starMatch) {
+						try {
+							return decodeURIComponent(starMatch[1].trim().replace(/^"|"$/g, ''));
+						} catch (error) {
+						}
+					}
+				}
+				return defaultFileName();
+			}
+
+			form.addEventListener('submit', function (event) {
+				event.preventDefault();
+				setPreparing(true);
+
+				fetch(buildExportUrl(), { credentials: 'same-origin' })
+					.then(function (response) {
+						if (!response.ok) {
+							throw new Error('PDF export failed');
+						}
+						var fileName = extractFileName(response.headers.get('Content-Disposition'));
+						return response.blob().then(function (blob) {
+							return { blob: blob, fileName: fileName };
+						});
+					})
+					.then(function (result) {
+						var objectUrl = URL.createObjectURL(result.blob);
+						var link = document.createElement('a');
+						link.href = objectUrl;
+						link.download = result.fileName;
+						document.body.appendChild(link);
+						link.click();
+						link.remove();
+						URL.revokeObjectURL(objectUrl);
+					})
+					.catch(function () {
+						window.alert('Не удалось сформировать PDF. Попробуйте ещё раз.');
+					})
+					.finally(function () {
+						setPreparing(false);
+					});
+			});
+		})();
+	</script>
+</body>
+</html>

@@ -14,6 +14,7 @@
 <body>
 	<section class="menu" th:insert="~{fragments/menu :: menu}"></section>
 	<main class="content">
+		<div th:replace="~{fragments/back :: back}"></div>
 		<h1 class="name" th:text="${user.id() == thisUser.id()? 'Личный кабинет' : 'Сотрудник'}">Сотрудник</h1>
 		<form method="post" th:action="@{/users/{id}(id=${thisUser.id()})}">
 			<section class="user block">

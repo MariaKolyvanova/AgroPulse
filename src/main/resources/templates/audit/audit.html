@@ -8,7 +8,7 @@
 	<link rel="stylesheet" th:href="@{/css/styles.css}">
 	<link rel="stylesheet" th:href="@{/css/menu.css}">
 	<link rel="stylesheet" th:href="@{/css/audit.css}">
-	<script th:src="@{/js/user.js}"></script>
+	<script th:src="@{/js/script.js}"></script>
 
 </head>
 <body>
@@ -45,21 +45,32 @@
 		
 		<div th:switch="${tab}">
 			
-			<!--			TODO: СОРТИРОВКА -->
 			<div th:case="'reports'">
 				<section class="reportAudit">
 					<form th:action="@{/audit}">
 						<input name="tab" th:value="${tab}" type="hidden">
 						<div class="filter">
 							<input class="filter fullName reports" name="fullName" placeholder="Сотрудник"
+							       list="employeeOptions"
 							       th:value="${reportAuditFilter.fullName()}"
 							       type="text">
+							<datalist id="employeeOptions">
+								<option th:each="name : ${employeeNames}" th:value="${name}"></option>
+							</datalist>
 							<input class="filter ip" name="status" placeholder="Статус"
+							       list="statusOptions"
 							       th:value="${reportAuditFilter.status()}"
 							       type="text">
+							<datalist id="statusOptions">
+								<option th:each="status : ${statuses}" th:value="${status.label}"></option>
+							</datalist>
 							<input class="filter report" name="reportName" placeholder="Отчёт"
+							       list="reportNameOptions"
 							       th:value="${reportAuditFilter.reportName()}"
 							       type="text">
+							<datalist id="reportNameOptions">
+								<option th:each="name : ${reportNames}" th:value="${name}"></option>
+							</datalist>
 							<input class="filter date" name="from" th:value="${reportAuditFilter.from()}"
 							       type="date">
 							<input class="filter date" name="to" th:value="${reportAuditFilter.to()}" type="date">
@@ -113,8 +124,12 @@
 									   th:href="@{'/users/' + ${reportAudit.userId()}}"
 									   th:text="${reportAudit.fullName()}">User</a>
 								</td>
-								<td th:text="${reportAudit.status()}"></td>
-								<td th:text="${reportAudit.reportName()}"></td>
+								<td th:text="${reportAudit.status().label}"></td>
+								<td>
+									<a class="link"
+									   th:href="@{'/reports/' + ${reportAudit.reportId()}}"
+									   th:text="${reportAudit.reportName()}">Отчет</a>
+								</td>
 								<td th:text="${#temporals.format(reportAudit.date(), 'HH:mm dd.MM.yyyy')}"></td>
 							</tr>
 							</tbody>

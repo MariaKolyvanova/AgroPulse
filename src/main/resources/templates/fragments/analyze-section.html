@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<body>
+	<article class="print-chapter"
+	         th:classappend="${section.esgSection()} ? ' print-chapter--esg' : ''"
+	         th:fragment="sectionPage(section, periodRange)">
+		<header class="print-chapter__header">
+			<div class="print-chapter__title-row">
+				<h1 th:text="${section.title()}"></h1>
+				<span class="print-chapter__unit"
+				      th:if="${section.unitCaption() != null and !section.unitCaption().isBlank()}"
+				      th:text="${section.unitCaption()}"></span>
+			</div>
+			<hr>
+		</header>
+
+		<div th:replace="~{fragments/analyze-section :: sectionBlock(section=${section}, includeHeader=false, nested=false)}"></div>
+	</article>
+
+	<article class="print-chapter"
+	         th:classappend="${section.esgSection()} ? ' print-chapter--esg' : ''"
+	         th:fragment="splitSectionPage(section, periodRange)">
+		<header class="print-chapter__header">
+			<h1 th:text="${section.title()}"></h1>
+			<hr>
+		</header>
+
+		<div th:replace="~{fragments/analyze-section :: sectionGroupBlock(section=${section}, includeHeader=false)}"></div>
+	</article>
+
+	<article class="print-chapter print-chapter--esg"
+	         th:fragment="esgPrintBlock(esgSections, periodRange)">
+		<header class="print-chapter__header">
+			<h1>Показатели устойчивого развития (ESG)</h1>
+			<hr>
+		</header>
+
+		<section class="print-esg-category"
+		         th:each="section : ${esgSections}">
+			<h2 class="print-esg-category__title" th:text="${section.title()}"></h2>
+			<div th:replace="~{fragments/analyze-section :: sectionGroupBlock(section=${section}, includeHeader=false)}"></div>
+		</section>
+	</article>
+
+	<div class="print-esg-block"
+	     th:fragment="esgAnalyzeBlock(esgSections)">
+		<h2 class="print-section__heading print-esg-block__title">Показатели устойчивого развития</h2>
+
+		<section class="print-esg-category"
+		         th:each="section : ${esgSections}">
+			<h3 class="print-section__heading print-section__heading--esg-category"
+			    th:text="${section.title()}"></h3>
+			<div th:replace="~{fragments/analyze-section :: sectionGroupBlock(section=${section}, includeHeader=false)}"></div>
+		</section>
+	</div>
+
+	<div class="print-section-group"
+	     th:fragment="sectionGroupBlock(section, includeHeader)"
+	     th:if="${!section.subsections().isEmpty()}">
+		<h2 class="print-section__heading"
+		    th:if="${includeHeader}"
+		    th:text="${section.title()}"></h2>
+
+		<div class="print-section__chart-row">
+			<div class="print-section__chart-col"
+			     th:each="subsection : ${section.subsections()}">
+				<div th:replace="~{fragments/analyze-section :: splitChartPanel(section=${subsection})}"></div>
+			</div>
+		</div>
+	</div>
+
+	<section class="print-section print-section--split-panel"
+	         th:fragment="splitChartPanel(section)"
+	         th:if="${!section.indicators().isEmpty()}"
+	         th:attr="data-chart-type=${section.chartType()},
+	                  data-period-labels=${#strings.listJoin(section.periodLabels(), ',')},
+	                  data-chart-decimals=${section.indicators().isEmpty() ? 0 : section.indicators().get(0).decimalPlaces()}">
+
+		<div class="print-split-panel__body">
+		<div class="print-section__chart-block">
+			<h3 class="print-section__split-heading" th:text="${section.title()}"></h3>
+			<p class="print-section__split-unit"
+			   th:if="${section.unitCaption() != null and !section.unitCaption().isBlank()}"
+			   th:text="${section.unitCaption()}"></p>
+
+			<p class="print-section__chart-title"
+			   th:if="${section.periodLabels().size() >= 2}"
+			   th:text="'Динамика показателей (' + ${section.periodLabels()[0]} + '–' + ${section.periodLabels()[section.periodLabels().size() - 1]} + ' гг.)'">
+			</p>
+
+			<div class="print-chart">
+				<canvas class="print-section__chart-canvas"></canvas>
+			</div>
+
+			<div class="print-section__chart-data">
+				<div class="indicator-block"
+				     th:each="indicator : ${section.indicators()}"
+				     th:attr="data-label=${indicator.indicatorName()},
+				              data-series-type=${indicator.seriesType()},
+				              data-two=${indicator.twoPeriodsAgoValue()},
+				              data-prev=${indicator.previousPeriodValue()},
+				              data-current=${indicator.currentValue()}">
+				</div>
+			</div>
+		</div>
+
+		<div class="print-indicator-cards">
+			<article class="print-indicator-card"
+			         th:each="indicator : ${section.indicators()}">
+				<div class="print-indicator-card__header">
+					<h2 class="print-indicator-card__title" th:text="${indicator.indicatorName()}"></h2>
+				</div>
+				<p class="print-indicator-card__values"
+				   th:if="${section.periodLabels().size() == 2}"
+				   th:with="changeCurr=${@ruNumbers.changePercent(indicator.previousPeriodValue(), indicator.currentValue())},
+				            prevLabel=${section.periodLabels()[0]},
+				            currLabel=${section.periodLabels()[1]}">
+					<span th:text="${prevLabel + ': '}"></span>
+					<strong th:text="${indicator.previousPeriodValue() != null ? @ruNumbers.format(indicator.previousPeriodValue(), indicator.decimalPlaces()) : '—'}"></strong>
+					<span class="print-indicator-card__arrow"> ➔ </span>
+					<span th:text="${currLabel + ': '}"></span>
+					<strong th:text="${indicator.currentValue() != null ? @ruNumbers.format(indicator.currentValue(), indicator.decimalPlaces()) : '—'}"></strong>
+					<span th:if="${changeCurr != null}" th:text="${' ' + changeCurr}"></span>
+				</p>
+				<p class="print-indicator-card__values"
+				   th:if="${section.periodLabels().size() >= 3}"
+				   th:with="hasTwoPeriodsAgo=${indicator.twoPeriodsAgoValue() != null},
+				            changePrev=${indicator.twoPeriodsAgoValue() != null ? @ruNumbers.changePercent(indicator.twoPeriodsAgoValue(), indicator.previousPeriodValue()) : null},
+				            changeCurr=${@ruNumbers.changePercent(indicator.previousPeriodValue(), indicator.currentValue())},
+				            prevLabel=${section.periodLabels()[1]},
+				            currLabel=${section.periodLabels()[2]}">
+					<th:block th:if="${hasTwoPeriodsAgo}">
+						<span th:text="${section.periodLabels()[0] + ': '}"></span>
+						<strong th:text="${@ruNumbers.format(indicator.twoPeriodsAgoValue(), indicator.decimalPlaces())}"></strong>
+						<span class="print-indicator-card__arrow"> ➔ </span>
+					</th:block>
+					<span th:text="${prevLabel + ': '}"></span>
+					<strong th:text="${indicator.previousPeriodValue() != null ? @ruNumbers.format(indicator.previousPeriodValue(), indicator.decimalPlaces()) : '—'}"></strong>
+					<span th:if="${changePrev != null}" th:text="${' ' + changePrev}"></span>
+					<span class="print-indicator-card__arrow"> ➔ </span>
+					<span th:text="${currLabel + ': '}"></span>
+					<strong th:text="${indicator.currentValue() != null ? @ruNumbers.format(indicator.currentValue(), indicator.decimalPlaces()) : '—'}"></strong>
+					<span th:if="${changeCurr != null}" th:text="${' ' + changeCurr}"></span>
+				</p>
+				<p class="print-indicator-card__conclusion"
+				   th:if="${indicator.conclusion() != null and !indicator.conclusion().isBlank()}">
+					<strong>Текущее состояние:</strong>
+					<span th:text="${indicator.conclusion()}"></span>
+				</p>
+				<div class="print-indicator-card__recommendation"
+				     th:classappend="${indicator.tone() != null ? ' print-indicator-card__recommendation--' + #strings.toLowerCase(indicator.tone().name()) : ''}"
+				     th:if="${indicator.recommendation() != null and !indicator.recommendation().isBlank()}">
+					<img alt="" class="print-indicator-card__recommendation-icon"
+					     th:src="${indicator.tone() != null and indicator.tone().name() == 'POSITIVE' ? '/images/check.svg' : '/images/warning.svg'}">
+					<div>
+						<strong>Рекомендация:</strong>
+						<span th:text="${indicator.recommendation()}"></span>
+					</div>
+				</div>
+			</article>
+		</div>
+		</div>
+	</section>
+
+	<section class="print-section"
+	         th:classappend="${nested} ? ' print-section--nested' : ''"
+	         th:fragment="sectionBlock(section, includeHeader, nested)"
+	         th:if="${!section.indicators().isEmpty()}"
+	         th:attr="data-chart-type=${section.chartType()},
+	                  data-period-labels=${#strings.listJoin(section.periodLabels(), ',')},
+	                  data-chart-decimals=${section.indicators().isEmpty() ? 0 : section.indicators().get(0).decimalPlaces()}">
+
+		<div class="print-section__title-row"
+		     th:if="${includeHeader and !nested}">
+			<h2 class="print-section__heading" th:text="${section.title()}"></h2>
+			<span class="print-section__unit"
+			      th:if="${section.unitCaption() != null and !section.unitCaption().isBlank()}"
+			      th:text="${section.unitCaption()}"></span>
+		</div>
+		<h3 class="print-section__heading print-section__heading--nested"
+		    th:if="${includeHeader and nested}"
+		    th:text="${section.title()}"></h3>
+
+		<div class="print-section__chart-block">
+			<p class="print-section__chart-title"
+			   th:if="${section.periodLabels().size() >= 2}"
+			   th:text="'Динамика показателей (' + ${section.periodLabels()[0]} + '–' + ${section.periodLabels()[section.periodLabels().size() - 1]} + ' гг.)'">
+			</p>
+
+			<div class="print-chart">
+				<canvas class="print-section__chart-canvas"></canvas>
+			</div>
+
+			<div class="print-section__chart-data">
+				<div class="indicator-block"
+				     th:each="indicator : ${section.indicators()}"
+				     th:attr="data-label=${indicator.indicatorName()},
+				              data-series-type=${indicator.seriesType()},
+				              data-two=${indicator.twoPeriodsAgoValue()},
+				              data-prev=${indicator.previousPeriodValue()},
+				              data-current=${indicator.currentValue()}">
+				</div>
+			</div>
+		</div>
+
+		<div class="print-indicator-cards">
+			<article class="print-indicator-card"
+			         th:each="indicator : ${section.indicators()}">
+				<div class="print-indicator-card__header">
+					<span class="print-indicator-card__marker"
+					      th:if="${section.chartType().name() == 'LINE' and indicator.seriesColor() != null}"
+					      th:style="'background-color:' + ${indicator.seriesColor()}"></span>
+					<h2 class="print-indicator-card__title" th:text="${indicator.indicatorName()}"></h2>
+				</div>
+				<p class="print-indicator-card__values"
+				   th:if="${section.periodLabels().size() == 2}"
+				   th:with="changeCurr=${@ruNumbers.changePercent(indicator.previousPeriodValue(), indicator.currentValue())},
+				            prevLabel=${section.periodLabels()[0]},
+				            currLabel=${section.periodLabels()[1]}">
+					<span th:text="${prevLabel + ': '}"></span>
+					<strong th:text="${indicator.previousPeriodValue() != null ? @ruNumbers.format(indicator.previousPeriodValue(), indicator.decimalPlaces()) : '—'}"></strong>
+					<span class="print-indicator-card__arrow"> ➔ </span>
+					<span th:text="${currLabel + ': '}"></span>
+					<strong th:text="${indicator.currentValue() != null ? @ruNumbers.format(indicator.currentValue(), indicator.decimalPlaces()) : '—'}"></strong>
+					<span th:if="${changeCurr != null}" th:text="${' ' + changeCurr}"></span>
+				</p>
+				<p class="print-indicator-card__values"
+				   th:if="${section.periodLabels().size() >= 3}"
+				   th:with="hasTwoPeriodsAgo=${indicator.twoPeriodsAgoValue() != null},
+				            changePrev=${indicator.twoPeriodsAgoValue() != null ? @ruNumbers.changePercent(indicator.twoPeriodsAgoValue(), indicator.previousPeriodValue()) : null},
+				            changeCurr=${@ruNumbers.changePercent(indicator.previousPeriodValue(), indicator.currentValue())},
+				            prevLabel=${section.periodLabels()[1]},
+				            currLabel=${section.periodLabels()[2]}">
+					<th:block th:if="${hasTwoPeriodsAgo}">
+						<span th:text="${section.periodLabels()[0] + ': '}"></span>
+						<strong th:text="${@ruNumbers.format(indicator.twoPeriodsAgoValue(), indicator.decimalPlaces())}"></strong>
+						<span class="print-indicator-card__arrow"> ➔ </span>
+					</th:block>
+					<span th:text="${prevLabel + ': '}"></span>
+					<strong th:text="${indicator.previousPeriodValue() != null ? @ruNumbers.format(indicator.previousPeriodValue(), indicator.decimalPlaces()) : '—'}"></strong>
+					<span th:if="${changePrev != null}" th:text="${' ' + changePrev}"></span>
+					<span class="print-indicator-card__arrow"> ➔ </span>
+					<span th:text="${currLabel + ': '}"></span>
+					<strong th:text="${indicator.currentValue() != null ? @ruNumbers.format(indicator.currentValue(), indicator.decimalPlaces()) : '—'}"></strong>
+					<span th:if="${changeCurr != null}" th:text="${' ' + changeCurr}"></span>
+					<span class="print-indicator-card__normal"
+					      th:if="${section.showNormal() and indicator.normalValue() != null}"
+					      th:text="${'Норма: ' + indicator.normalValue()}"></span>
+				</p>
+				<p class="print-indicator-card__conclusion"
+				   th:if="${indicator.conclusion() != null and !indicator.conclusion().isBlank()}">
+					<strong>Текущее состояние:</strong>
+					<span th:text="${indicator.conclusion()}"></span>
+				</p>
+				<div class="print-indicator-card__recommendation"
+				     th:classappend="${indicator.tone() != null ? ' print-indicator-card__recommendation--' + #strings.toLowerCase(indicator.tone().name()) : ''}"
+				     th:if="${indicator.recommendation() != null and !indicator.recommendation().isBlank()}">
+					<img alt="" class="print-indicator-card__recommendation-icon"
+					     th:src="${indicator.tone() != null and indicator.tone().name() == 'POSITIVE' ? '/images/check.svg' : '/images/warning.svg'}">
+					<div>
+						<strong>Рекомендация:</strong>
+						<span th:text="${indicator.recommendation()}"></span>
+					</div>
+				</div>
+			</article>
+		</div>
+	</section>
+
+	<table class="print-summary-table" th:fragment="summaryTable(periodLabels, rows)">
+		<thead>
+		<tr>
+			<th class="print-summary-table__section">Раздел</th>
+			<th class="print-summary-table__indicator">Показатель</th>
+			<th class="print-summary-table__value"
+			    th:text="${periodLabels.size() > 0 ? periodLabels[0] : 'Позапрошлый период'}"></th>
+			<th class="print-summary-table__value"
+			    th:text="${periodLabels.size() > 1 ? periodLabels[1] : 'Прошлый период'}"></th>
+			<th class="print-summary-table__value"
+			    th:text="${periodLabels.size() > 2 ? periodLabels[2] : 'Текущий период'}"></th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr th:each="row : ${rows}">
+			<td th:text="${row.sectionTitle()}"></td>
+			<td th:text="${row.indicatorName()}"></td>
+			<td class="print-summary-table__num"
+			    th:text="${row.twoPeriodsAgoValue() != null ? @ruNumbers.format(row.twoPeriodsAgoValue(), row.decimalPlaces()) : '—'}"></td>
+			<td class="print-summary-table__num"
+			    th:text="${row.previousPeriodValue() != null ? @ruNumbers.format(row.previousPeriodValue(), row.decimalPlaces()) : '—'}"></td>
+			<td class="print-summary-table__num"
+			    th:text="${row.currentValue() != null ? @ruNumbers.format(row.currentValue(), row.decimalPlaces()) : '—'}"></td>
+		</tr>
+		</tbody>
+	</table>
+
+	<section class="print-chapter print-chapter--summary" th:fragment="summaryTablePage(periodRange, periodLabels, rows)">
+		<header class="print-chapter__header">
+			<h1>Сводная таблица показателей</h1>
+			<hr>
+		</header>
+		<div th:replace="~{fragments/analyze-section :: summaryTable(periodLabels=${periodLabels}, rows=${rows})}"></div>
+	</section>
+</body>
+</html>

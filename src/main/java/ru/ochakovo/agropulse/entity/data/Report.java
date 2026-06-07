@@ -25,8 +25,7 @@ public class Report extends BaseEntity {
     @Column(nullable = false)
     private Short reportYear;
 
-    @Column(nullable = false)
-    private Short reportMonth;
+    private Month reportMonth;
 
     @Column(nullable = false)
     private String reportName;

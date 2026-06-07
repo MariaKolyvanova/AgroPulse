@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>ESG-показатели</title>
+	<link href="/images/icon.svg" rel="icon" type="image/svg+xml">
+	<link href="/images/icon.ico" rel="alternate icon">
+	<link rel="stylesheet" th:href="@{/css/styles.css}">
+	<link rel="stylesheet" th:href="@{/css/menu.css}">
+	<link rel="stylesheet" th:href="@{/css/reports/data.css}">
+</head>
+<body>
+<section class="menu" th:insert="~{fragments/menu :: menu}"></section>
+<main class="content">
+	<h1 class="name">ESG-показатели</h1>
+
+	<form class="esg-year-form" method="get" th:action="@{/esg}">
+		<label class="esg-year-label" for="year">Отчётный год</label>
+		<select class="value esg-year-select" id="year" name="year" onchange="this.form.submit()">
+			<option th:each="availableYear : ${availableYears}"
+			        th:selected="${availableYear == esgPage.selectedYear()}"
+			        th:text="${availableYear}"
+			        th:value="${availableYear}"></option>
+		</select>
+	</form>
+
+	<form method="post" th:action="@{/esg}">
+		<input th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden">
+		<input name="year" th:value="${esgPage.selectedYear()}" type="hidden">
+		<div th:replace="~{fragments/esg-form :: esg-form}"></div>
+	</form>
+</main>
+</body>
+</html>

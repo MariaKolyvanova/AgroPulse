@@ -1,0 +1,740 @@
+@page {
+    size: A4 portrait;
+    margin: 12mm 15mm 20mm 15mm;
+}
+
+body.print-document {
+    margin: 0 auto;
+    padding: 12mm 15mm;
+    max-width: 210mm;
+    box-sizing: border-box;
+    background: white;
+    color: #111827;
+    font-family: Inter, Arial, sans-serif;
+    --color-border: #E7E5E4;
+}
+
+.print-cover {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 250mm;
+    padding: 12mm 8mm 18mm;
+    text-align: center;
+    break-after: page;
+    box-sizing: border-box;
+}
+
+.print-cover__note {
+    margin: 0 0 10mm;
+    width: 100%;
+    max-width: 170mm;
+    font-size: 10pt;
+    line-height: 1.45;
+    color: #6B7280;
+}
+
+.print-cover__main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4mm;
+    width: 100%;
+    max-width: 170mm;
+}
+
+.print-cover__heading {
+    margin: 0 0 3mm;
+    font-size: 17pt;
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #111827;
+}
+
+.print-cover__subtitle {
+    margin: 0 0 8mm;
+    max-width: 150mm;
+    font-size: 11pt;
+    font-weight: 400;
+    line-height: 1.45;
+    letter-spacing: normal;
+    text-transform: none;
+    color: #4B5563;
+}
+
+.print-cover__line {
+    margin: 0;
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #374151;
+}
+
+.print-cover__line span {
+    font-weight: 600;
+    color: #111827;
+}
+
+.print-chapter {
+    margin-bottom: 8mm;
+    padding-top: 4mm;
+}
+
+.print-chapter:first-of-type {
+    padding-top: 0;
+}
+
+.print-chapter__header {
+    break-after: avoid;
+    page-break-after: avoid;
+}
+
+.print-chapter__header + .print-section .print-section__chart-block,
+.print-chapter__header + .print-section-group .print-section__chart-row,
+.print-chapter__header + .print-esg-category .print-section__chart-row {
+    break-before: avoid;
+    page-break-before: avoid;
+}
+
+.print-chapter__title-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6mm;
+}
+
+.print-chapter__title-row h1 {
+    margin: 0;
+    flex: 1 1 auto;
+    min-width: 0;
+    font-size: 18pt;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+.print-chapter__unit {
+    margin: 0;
+    flex: 0 0 auto;
+    font-size: 10pt;
+    line-height: 1.4;
+    text-align: right;
+    white-space: nowrap;
+    color: #6B7280;
+}
+
+.print-section__title-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6mm;
+    margin-bottom: 8px;
+    break-after: avoid;
+    page-break-after: avoid;
+}
+
+.print-section__title-row .print-section__heading {
+    margin: 0;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.print-section__unit {
+    margin: 0;
+    flex: 0 0 auto;
+    font-size: 10pt;
+    line-height: 1.4;
+    text-align: right;
+    white-space: nowrap;
+    color: #6B7280;
+}
+
+.print-chapter--section-title {
+    break-before: page;
+    padding: 35mm 0 25mm;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.print-chapter--section-title h1 {
+    font-size: 18pt;
+    font-weight: 600;
+    margin: 0;
+}
+
+.print-chapter--summary {
+    break-before: page;
+    page-break-before: always;
+}
+
+.print-chapter--comment {
+    break-before: page;
+    page-break-before: always;
+}
+
+.print-chapter--esg {
+    break-before: page;
+    margin-bottom: 8mm;
+}
+
+.print-chapter--esg > .print-esg-category:first-of-type {
+    break-before: avoid;
+    page-break-before: avoid;
+}
+
+.print-chapter--esg .print-esg-category + .print-esg-category {
+    margin-top: 0;
+    break-before: page;
+    page-break-before: always;
+}
+
+.print-chapter--esg > .print-chapter__header h1 {
+    font-size: 18pt;
+    font-weight: 600;
+}
+
+.print-esg-category {
+    margin-bottom: 7mm;
+}
+
+.print-esg-category__title {
+    margin: 0 0 6mm;
+    font-size: 18pt;
+    font-weight: 400;
+    color: #111827;
+    break-after: avoid;
+    page-break-after: avoid;
+}
+
+.print-esg-category__title + .print-section-group {
+    break-before: avoid;
+    page-break-before: avoid;
+}
+
+.print-esg-category:last-child {
+    margin-bottom: 0;
+}
+
+
+.print-split-panel__body {
+    display: block;
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+.print-split-panel__body .print-section__chart-block,
+.print-split-panel__body .print-chart,
+.print-split-panel__body .print-section__chart-canvas,
+.print-split-panel__body .print-section__chart-image,
+.print-split-panel__body .print-indicator-cards,
+.print-split-panel__body .print-indicator-card,
+.print-split-panel__body .print-indicator-card__recommendation {
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+    break-before: auto !important;
+    page-break-before: auto !important;
+}
+
+.print-chapter--esg .print-section__chart-row {
+    display: block;
+    font-size: 0;
+    break-inside: auto;
+    page-break-inside: auto;
+}
+
+.print-chapter--esg .print-section__chart-col {
+    display: inline-block;
+    width: calc(50% - 2.5mm);
+    margin: 0 2.5mm 5mm 0;
+    vertical-align: top;
+    font-size: 11pt;
+    box-sizing: border-box;
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+.print-chapter--esg .print-section__chart-col:nth-child(2n) {
+    margin-right: 0;
+}
+
+.print-chapter--esg .print-section--split-panel {
+    display: block;
+    break-inside: auto;
+    page-break-inside: auto;
+}
+
+.print-section__chart-image {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.print-esg-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 8.5pt;
+    table-layout: fixed;
+}
+
+.print-esg-table th,
+.print-esg-table td {
+    border: 1px solid #334155;
+    padding: 2mm 2.5mm;
+    vertical-align: top;
+    word-wrap: break-word;
+}
+
+.print-esg-table thead th {
+    background: #E2E8F0;
+    font-weight: 600;
+    text-align: center;
+}
+
+.print-esg-table tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+.print-esg-table__indicator {
+    width: 34%;
+    text-align: left;
+}
+
+.print-esg-table__unit {
+    width: 12%;
+    text-align: center;
+}
+
+.print-esg-table__value {
+    width: 14%;
+}
+
+.print-esg-table__norm {
+    width: 22%;
+    text-align: center;
+}
+
+.print-esg-table__status {
+    width: 18%;
+    text-align: center;
+}
+
+.print-esg-table__num {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.print-esg-table__status-label {
+    display: inline-block;
+    padding: 1mm 2mm;
+    border-radius: 3mm;
+    font-size: 8pt;
+    line-height: 1.35;
+    white-space: nowrap;
+}
+
+.print-esg-table__status-label--positive {
+    background: #ECFDF3;
+    color: #027A48;
+}
+
+.print-esg-table__status-label--warning {
+    background: #FFF7ED;
+    color: #C2410C;
+}
+
+.print-esg-table__status-label--neutral {
+    background: #F9FAFB;
+    color: #6B7280;
+}
+
+.print-section__subtitle {
+    margin: 4mm 0 0;
+    font-size: 10pt;
+    color: #6B7280;
+}
+
+.print-section__chart-title {
+    margin: 0 0 4mm;
+    font-size: 11pt;
+    font-weight: 500;
+    color: #374151;
+    text-align: center;
+    break-after: avoid;
+    page-break-after: avoid;
+}
+
+.print-section__chart-block {
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+.print-section-group {
+    margin-bottom: 6mm;
+}
+
+.print-section__chart-row {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 5mm;
+}
+
+.print-section__chart-col {
+    flex: 1 1 calc(50% - 2.5mm);
+    min-width: calc(50% - 2.5mm);
+    max-width: calc(50% - 2.5mm);
+    box-sizing: border-box;
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+.print-section--split-panel {
+    margin: 0;
+    box-sizing: border-box;
+    border: 1px solid var(--color-border);
+    padding: 4mm;
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+.print-section__split-heading {
+    margin: 0 0 3mm;
+    font-size: 10.5pt;
+    font-weight: 600;
+    line-height: 1.35;
+    text-align: center;
+    color: #111827;
+}
+
+.print-section__split-unit {
+    margin: 0 0 3mm;
+    font-size: 9pt;
+    text-align: center;
+    color: #6B7280;
+}
+
+.print-section--split-panel .print-section__chart-title {
+    margin: 0 0 3mm;
+    font-size: 9.5pt;
+}
+
+.print-section--split-panel .print-chart {
+    margin-bottom: 4mm;
+    min-height: calc(280px / 3);
+}
+
+.print-section--split-panel .print-section__chart-canvas {
+    min-height: calc(280px / 3);
+}
+
+.print-section--split-panel .print-indicator-cards {
+    gap: 3mm;
+}
+
+.print-section--split-panel .print-indicator-card {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.print-section--split-panel .print-indicator-card__header {
+    display: none;
+}
+
+.print-section--split-panel .print-indicator-card__title {
+    font-size: 10pt;
+}
+
+.print-section--split-panel .print-indicator-card__values,
+.print-section--split-panel .print-indicator-card__conclusion,
+.print-section--split-panel .print-indicator-card__recommendation {
+    font-size: 9pt;
+}
+
+.print-summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 8.5pt;
+    table-layout: fixed;
+}
+
+.print-summary-table th,
+.print-summary-table td {
+    border: 1px solid #334155;
+    padding: 2mm 2.5mm;
+    vertical-align: top;
+    word-wrap: break-word;
+    text-align: center;
+}
+
+.print-summary-table thead {
+    display: table-header-group;
+}
+
+.print-summary-table thead th {
+    background: #E2E8F0;
+    font-weight: 600;
+    text-align: center;
+}
+
+.print-summary-table tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+.print-summary-table__section {
+    width: 22%;
+}
+
+.print-summary-table__indicator {
+    width: 28%;
+}
+
+.print-summary-table__value {
+    width: 16%;
+}
+
+.print-summary-table__num {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.print-document hr {
+    border: none;
+    height: 2px;
+    background-color: #E7E5E4;
+    margin-bottom: 4mm;
+}
+
+.print-chart {
+    width: 100%;
+    min-height: 280px;
+    margin-bottom: 6mm;
+    break-before: avoid;
+    page-break-before: avoid;
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+.print-section__chart-canvas {
+    display: block;
+    width: 100% !important;
+    min-height: 280px;
+    height: auto !important;
+}
+
+.print-section__chart-data {
+    display: none;
+}
+
+.print-indicator-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 5mm;
+}
+
+.print-indicator-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    padding-bottom: 4mm;
+    border-bottom: 1px solid #E2E8F0;
+}
+
+.print-indicator-card:last-child {
+    border-bottom: none;
+}
+
+.print-indicator-card__header {
+    display: flex;
+    align-items: center;
+    gap: 3mm;
+    margin-bottom: 2mm;
+}
+
+.print-indicator-card__marker {
+    width: 3.5mm;
+    height: 3.5mm;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.print-indicator-card__title {
+    margin: 0;
+    font-size: 11pt;
+    font-weight: 600;
+}
+
+.print-indicator-card__values {
+    margin: 0 0 2mm;
+    font-size: 10pt;
+    line-height: 1.5;
+    color: #374151;
+}
+
+.print-indicator-card__values strong {
+    font-weight: 600;
+    color: #111827;
+}
+
+.print-indicator-card__arrow {
+    color: #6B7280;
+}
+
+.print-indicator-card__normal {
+    margin-left: 1.25em;
+    color: #6B7280;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.print-indicator-card__conclusion {
+    margin: 0 0 2mm;
+    font-size: 10pt;
+    line-height: 1.45;
+}
+
+.print-indicator-card__recommendation {
+    display: flex;
+    gap: 3mm;
+    align-items: flex-start;
+    padding: 3mm 4mm;
+    border-radius: 4mm;
+    font-size: 10pt;
+    line-height: 1.45;
+    break-inside: avoid;
+}
+
+.print-indicator-card__recommendation--positive {
+    background: #ECFDF3;
+}
+
+.print-indicator-card__recommendation--warning {
+    background: #FFF7ED;
+}
+
+.print-indicator-card__recommendation--critical {
+    background: #FEF2F2;
+}
+
+.print-indicator-card__recommendation--neutral {
+    background: #F9FAFB;
+}
+
+.print-indicator-card__recommendation-icon {
+    width: 5mm;
+    height: 5mm;
+    flex-shrink: 0;
+    margin-top: 0.5mm;
+}
+
+.print-comment {
+    font-size: 11pt;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.print-comment__paragraph {
+    margin: 0 0 0.75em;
+    text-indent: 4ch;
+    white-space: pre-wrap;
+}
+
+.print-comment__paragraph:last-child {
+    margin-bottom: 0;
+}
+
+canvas {
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+.print-empty {
+    padding: 20mm 0;
+    color: #6B7280;
+}
+
+@media screen {
+    html {
+        background: #E2E8F0;
+    }
+}
+
+@media print {
+    html {
+        background: white;
+    }
+
+    body.print-document {
+        margin: 0;
+        padding: 0;
+        max-width: none;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .print-split-panel__body {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+    }
+
+    .print-split-panel__body .print-section__chart-block,
+    .print-split-panel__body .print-chart,
+    .print-split-panel__body .print-section__chart-canvas,
+    .print-split-panel__body .print-section__chart-image,
+    .print-split-panel__body .print-indicator-card,
+    .print-split-panel__body .print-indicator-card__recommendation {
+        break-inside: auto !important;
+        page-break-inside: auto !important;
+    }
+
+    .print-chart:not(.print-split-panel__body .print-chart),
+    .print-section__chart-canvas:not(.print-split-panel__body .print-section__chart-canvas),
+    .print-section__chart-block:not(.print-split-panel__body .print-section__chart-block),
+    .print-section__chart-row:not(.print-chapter--esg .print-section__chart-row),
+    .print-chapter__header,
+    .print-indicator-card:not(.print-split-panel__body .print-indicator-card),
+    .print-indicator-card__recommendation:not(.print-split-panel__body .print-indicator-card__recommendation),
+    .print-section--split-panel:not(.print-chapter--esg .print-section--split-panel) {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .print-chapter--esg .print-section__chart-row {
+        display: block;
+        font-size: 0;
+        break-inside: auto;
+        page-break-inside: auto;
+    }
+
+    .print-chapter--esg .print-section__chart-col {
+        display: inline-block;
+        width: calc(50% - 2.5mm);
+        vertical-align: top;
+        font-size: 11pt;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .print-chapter--esg > .print-esg-category:first-of-type {
+        break-before: avoid;
+        page-break-before: avoid;
+    }
+
+    .print-chapter--esg .print-esg-category + .print-esg-category {
+        margin-top: 0;
+        break-before: page;
+        page-break-before: always;
+    }
+
+    .print-chapter--summary,
+    .print-chapter--comment {
+        break-before: page;
+        page-break-before: always;
+    }
+}
+
+table {
+    font-size: 12pt;
+}

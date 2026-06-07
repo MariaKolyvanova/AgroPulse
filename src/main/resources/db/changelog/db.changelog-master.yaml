@@ -4,4 +4,16 @@ databaseChangeLog:
   - include:
       file: db/changelog/create-envers.sql
   - include:
-      file: db/changelog/db.changelog-indicators-data.sql
+      file: db/changelog/create-indexes.sql
+  - include:
+      file: db/changelog/db.changelog-insert-data.sql
+  - changeSet:
+      id: seed-demo-data
+      author: MariaKolyvanova
+      runOnChange: true
+      changes:
+        - sqlFile:
+            path: db/seed/demo-data.sql
+            relativeToChangelogFile: false
+            splitStatements: true
+            stripComments: true

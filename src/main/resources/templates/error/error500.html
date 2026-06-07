@@ -1,12 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
-	<title>Error 500</title>
+	<meta content="width=device-width, initial-scale=1" name="viewport">
+	<title>Ошибка сервера</title>
 	<link rel="icon" type="image/svg+xml" href="/images/icon.svg">
 	<link rel="alternate icon" href="/images/icon.ico">
+	<link rel="stylesheet" th:href="@{/css/styles.css}">
+	<link rel="stylesheet" th:href="@{/css/error.css}">
 </head>
 <body>
-	Error!
+	<main class="error-page">
+		<section aria-labelledby="error-title" class="error-card">
+			<div aria-hidden="true" class="error-icon-wrap">
+				<img alt="" class="error-icon" th:src="@{/images/warning.svg}">
+			</div>
+			<p aria-hidden="true" class="error-code">500</p>
+			<h1 class="error-title" id="error-title">Что-то пошло не так</h1>
+			<p class="error-message secondary-text">
+				На сервере произошла непредвиденная ошибка. Попробуйте вернуться назад или перейти на главную страницу.
+			</p>
+			<div class="error-actions">
+				<a class="error-button" th:href="@{/reports}">На главную</a>
+				<button class="error-button-secondary" onclick="history.back()" type="button">Назад</button>
+			</div>
+		</section>
+	</main>
 </body>
 </html>

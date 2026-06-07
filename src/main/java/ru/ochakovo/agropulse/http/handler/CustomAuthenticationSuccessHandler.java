@@ -10,10 +10,6 @@ import ru.ochakovo.agropulse.security.CustomUserDetails;
 
 import java.io.IOException;
 
-import static ru.ochakovo.agropulse.entity.organization.Role.ADMINISTRATOR;
-import static ru.ochakovo.agropulse.entity.organization.Role.ANALYTIC;
-import static ru.ochakovo.agropulse.entity.organization.Role.OPERATOR;
-
 @Component
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler{
 
@@ -28,7 +24,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             redirectUrl = switch (details.getRole()) {
                 case ADMINISTRATOR -> "/companies/main";
                 case OPERATOR -> "/reports/create";
-                case ANALYTIC -> "/reports/calculation";
+                case ANALYTIC -> "/reports";
             };
         }
 

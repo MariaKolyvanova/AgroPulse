@@ -7,7 +7,7 @@ import org.springframework.security.authentication.event.AbstractAuthenticationF
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.stereotype.Component;
 import ru.ochakovo.agropulse.entity.organization.User;
-import ru.ochakovo.agropulse.repository.UserRepository;
+import ru.ochakovo.agropulse.repository.organization.UserRepository;
 import ru.ochakovo.agropulse.service.audit.AuthAuditService;
 
 @Component

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title th:text="${report != null ? report.reportName() : 'Финансовый аналитический отчёт'}">
+		Финансовый аналитический отчёт
+	</title>
+	<link rel="stylesheet" th:href="@{/css/print/print.css}">
+</head>
+<body class="print-document"
+      th:with="periodLabels=${analyzePage != null and !analyzePage.sections().isEmpty() ? analyzePage.sections().get(0).periodLabels() : null},
+               periodRange=${periodLabels != null ? periodLabels.get(0) + '–' + periodLabels.get(periodLabels.size() - 1) : ''}"
+      th:attr="data-footer-label=${periodRange != null and !periodRange.isBlank()
+          ? 'Финансовый аналитический отчёт · ' + periodRange
+          : 'Финансовый аналитический отчёт'}">
+
+	<section class="print-cover" th:if="${report != null and company != null}">
+		<p class="print-cover__note">Сформировано автоматически системой AgroPulse</p>
+		<div class="print-cover__main">
+			<h1 class="print-cover__heading">Финансово-аналитический отчёт</h1>
+			<p class="print-cover__subtitle">для формирования финансовой политики организации в условиях устойчивого развития</p>
+			<p class="print-cover__line">
+				по состоянию организации
+				<span th:text="${company.name()}"></span>
+			</p>
+			<p class="print-cover__line">
+				период анализа
+				<span th:text="${periodRange != null and !periodRange.isBlank() ? periodRange + ' гг.' : '—'}"></span>
+			</p>
+		</div>
+	</section>
+
+	<th:block th:if="${analyzePage != null and (!analyzePage.sections().isEmpty() or !analyzePage.esgSections().isEmpty())}">
+		<th:block th:if="${!analyzePage.sections().isEmpty()}">
+			<th:block th:each="section : ${analyzePage.sections()}">
+				<th:block th:if="${!section.subsections().isEmpty() and section.indicators().isEmpty()}">
+					<div th:replace="~{fragments/analyze-section :: splitSectionPage(section=${section}, periodRange=${periodRange})}"></div>
+				</th:block>
+				<th:block th:unless="${!section.subsections().isEmpty() and section.indicators().isEmpty()}">
+					<div th:replace="~{fragments/analyze-section :: sectionPage(section=${section}, periodRange=${periodRange})}"></div>
+				</th:block>
+			</th:block>
+		</th:block>
+
+		<th:block th:if="${!analyzePage.esgSections().isEmpty()}">
+			<div th:replace="~{fragments/analyze-section :: esgPrintBlock(esgSections=${analyzePage.esgSections()}, periodRange=${periodRange})}"></div>
+		</th:block>
+
+		<div th:if="${!analyzePage.summaryRows().isEmpty()}"
+		     th:replace="~{fragments/analyze-section :: summaryTablePage(periodRange=${periodRange}, periodLabels=${periodLabels}, rows=${analyzePage.summaryRows()})}">
+		</div>
+
+		<section class="print-chapter print-chapter--comment"
+		         th:if="${analyzePage.analystComment() != null and !analyzePage.analystComment().isBlank()}">
+			<header class="print-chapter__header">
+				<h1>Комментарий аналитика</h1>
+				<hr>
+			</header>
+			<div class="print-comment">
+				<p class="print-comment__paragraph"
+				   th:each="paragraph : ${analyzePage.analystCommentParagraphs()}"
+				   th:text="${paragraph}"></p>
+			</div>
+		</section>
+	</th:block>
+
+	<p class="print-empty"
+	   th:if="${analyzePage == null or (analyzePage.sections().isEmpty() and analyzePage.esgSections().isEmpty())}">
+		Нет рассчитанных показателей для формирования отчёта.
+	</p>
+
+	<script th:src="@{/js/vendor/chart.umd.min.js}"></script>
+	<script th:src="@{/js/vendor/chartjs-plugin-datalabels.min.js}"></script>
+	<script th:src="@{/js/print/print-charts.js}"></script>
+</body>
+</html>

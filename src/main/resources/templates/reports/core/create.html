@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Создание отчёта</title>
+	<link rel="icon" type="image/svg+xml" href="/images/icon.svg">
+	<link rel="alternate icon" href="/images/icon.ico">
+	<link rel="stylesheet" th:href="@{/css/styles.css}">
+	<link rel="stylesheet" th:href="@{/css/menu.css}">
+	<link rel="stylesheet" th:href="@{/css/reports/create.css}">
+	<script defer th:src="@{/js/script.js}"></script>
+</head>
+<body>
+	<section class="menu" th:insert="~{fragments/menu :: menu}"></section>
+	<main class="content">
+		<div th:replace="~{fragments/back :: back}"></div>
+		<h1 class="name">Создание отчёта</h1>
+
+		<section class="create">
+			<form class="create section" th:action="@{/reports/create}" method="post" enctype="multipart/form-data">
+				<div class="block drop-zone">
+					<div id="createDropPane" class="grid">
+						<img src="/images/upload.svg" class="create" alt="">
+						<p class="drop-zone-title">Перетащите xml-файл сюда</p>
+						<p class="drop-zone-or">или</p>
+						<label class="button file" for="fileInput">Выбрать xml-файл</label>
+						<input id="fileInput" name="file" type="file" accept=".xml,application/xml,text/xml" required>
+					</div>
+
+					<div id="createLoadedPane" class="grid created create-pane--loaded" hidden>
+						<img src="/images/uploaded.svg" class="create created" alt="">
+						<p id="createdFileLabel" class="drop-zone-title">Файл</p>
+					</div>
+				</div>
+
+				<section class="create-panel block">
+					<h2 class="create">Параметры отчёта</h2>
+
+					<div class="form-group">
+						<label class="form-text" for="reportName">Название отчёта</label>
+						<input id="reportName"
+						       class="form"
+							   name="reportName"
+							   type="text"
+							   placeholder="введите название отчёта"
+							   maxlength="255"
+							   th:value="${report != null} ? ${report.reportName()} : ''"
+							   required>
+					</div>
+
+					<div class="form-group">
+						<label class="form-text">Период данных</label>
+						<div class="period-grid">
+							<select class="period placeholder" id="reportMonth" name="reportMonth">
+								<option value="" th:selected="${report == null || report.reportMonth() == null}">Месяц</option>
+								<option th:each="m : ${T(ru.ochakovo.agropulse.entity.data.Month).values()}"
+								        th:value="${m}"
+								        th:text="${m.getName()}"
+								        th:selected="${report != null && report.reportMonth() == m}">
+								</option>
+							</select>
+
+							<input class="period year"
+							       id="reportYear"
+							       name="reportYear"
+							       type="number"
+							       placeholder="год"
+							       min="2000"
+							       max="2100"
+							       th:value="${report != null && report.reportYear() != null} ? ${report.reportYear()} : ''"
+							       required>
+						</div>
+					</div>
+
+					<div class="form-messages" th:if="${reportErrors != null or createError != null}">
+						<div class="form-errors" th:if="${reportErrors}">
+							<p class="error-message" th:each="error : ${reportErrors}" th:text="${error.defaultMessage}"></p>
+						</div>
+						<p class="error-message" th:if="${createError != null}" th:text="${createError}"></p>
+					</div>
+
+					<button class="create button" type="submit">Загрузить</button>
+				</section>
+			</form>
+		</section>
+	</main>
+</body>
+</html>

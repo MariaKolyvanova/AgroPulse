@@ -2,6 +2,7 @@ package ru.ochakovo.agropulse.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -14,11 +15,18 @@ import ru.ochakovo.agropulse.http.handler.CustomAuthenticationSuccessHandler;
 public class SecurityConfiguration {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomAuthenticationSuccessHandler successHandler) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                                   CustomAuthenticationSuccessHandler successHandler) throws Exception {
         http
                 .formLogin(form -> form
                         .loginPage("/login")
                         .successHandler(successHandler)
+                        .failureHandler((request, response, exception) -> {
+                            String redirectUrl = exception instanceof DisabledException
+                                    ? "/login?disabled"
+                                    : "/login?error";
+                            response.sendRedirect(redirectUrl);
+                        })
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
@@ -26,13 +34,7 @@ public class SecurityConfiguration {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/registration").permitAll()
-                        .requestMatchers("/v3/api-docs/**",
-                                        "/swagger-ui/**",
-                                        "/swagger-ui.html",
-                                        "/css/**",
-                                        "/js/**",
-                                        "/images/**"
-                                        ).permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
                         .anyRequest().authenticated()
                 );
 

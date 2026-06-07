@@ -1,0 +1,129 @@
+form.create {
+    display: flex;
+}
+
+div.drop-zone {
+    position: relative;
+    display: block;
+    width: 520px;
+    height: 520px;
+    padding: 60px;
+}
+
+div.grid {
+    width: 100%;
+    height: 100%;
+    padding: 30px;
+    border: 1px dashed var(--color-primary);
+    border-radius: 30px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+img.create {
+    height: 100px;
+    width: 100px;
+    margin: 30px 0;
+}
+
+.drop-zone-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.drop-zone-or {
+    color: var(--color-secondary-text);
+    font-size: 16px;
+    margin: 15px 0;
+}
+
+label.button.file {
+    margin: 0 auto;
+}
+
+#fileInput {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+}
+
+
+
+section.create-panel {
+    width: 420px;
+    padding: 60px;
+    margin-left: 60px;
+}
+
+h2.create {
+    margin-bottom: 30px
+}
+
+div.form-group {
+    margin-bottom: 30px;
+    display: inline-grid;
+}
+
+
+label.form-text {
+
+}
+
+input, select {
+    border: 2px solid var(--color-border);
+    border-radius: 30px;
+    width: 300px;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 15px;
+    font-size: 16px;
+    color: black;
+    text-align: left;
+}
+
+div.period-grid {
+    display: flex;
+    gap: 15px;
+}
+
+select.period,
+input.period {
+    width: 135px;
+}
+
+.form-text {
+    margin-bottom: 5px;
+}
+
+button.create {
+    margin: 60px auto 0 auto;
+}
+
+.form-messages {
+    margin-bottom: 20px;
+}
+
+.form-errors {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.error-message {
+    color: var(--color-red);
+    margin: 0;
+}
+
+input.filter.type {
+    width: 180px;
+}
+
+
+div.created {
+    border: 1px solid var(--color-green);
+}

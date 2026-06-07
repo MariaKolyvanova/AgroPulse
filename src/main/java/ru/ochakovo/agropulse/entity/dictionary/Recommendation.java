@@ -14,12 +14,18 @@ import ru.ochakovo.agropulse.entity.BaseEntity;
 public class Recommendation extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "indicator_id")
-    private Indicator indicator;
+    @JoinColumn(name = "indicator_id", nullable = false)
+    private IndicatorsFinancialAnalyze indicatorsFinancialAnalyze;
 
-    private String name;
-
-    private String description;
-
+    @Column(name = "condition_rule", nullable = false)
     private String conditionRule;
+
+    @Column(name = "conclusion_text")
+    private String conclusionText;
+
+    @Column(name = "recommendation_text")
+    private String recommendationText;
+
+    @Column(nullable = false, length = 20)
+    private String condition;
 }

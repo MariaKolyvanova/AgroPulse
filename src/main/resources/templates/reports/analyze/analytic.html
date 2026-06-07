@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Аналитика</title>
+	<link href="/images/icon.svg" rel="icon" type="image/svg+xml">
+	<link href="/images/icon.ico" rel="alternate icon">
+	<link rel="stylesheet" th:href="@{/css/styles.css}">
+	<link rel="stylesheet" th:href="@{/css/menu.css}">
+	<link rel="stylesheet" th:href="@{/css/print/print.css}">
+	<link rel="stylesheet" th:href="@{/css/reports/analytic.css}">
+</head>
+<body>
+	<section class="menu" th:insert="~{fragments/menu :: menu}"></section>
+	<main class="content analytic">
+		<div th:replace="~{fragments/back :: back}"></div>
+		<h1 class="name">Аналитика</h1>
+
+		<th:block th:if="${analyzePage != null and !analyzePage.sections().isEmpty()}">
+			<th:block th:each="section : ${analyzePage.sections()}">
+				<div class="block analytic-section-group">
+					<th:block th:if="${!section.subsections().isEmpty() and section.indicators().isEmpty()}">
+						<div th:replace="~{fragments/analyze-section :: sectionGroupBlock(section=${section}, includeHeader=true)}"></div>
+					</th:block>
+					<th:block th:unless="${!section.subsections().isEmpty() and section.indicators().isEmpty()}">
+						<div th:replace="~{fragments/analyze-section :: sectionBlock(section=${section}, includeHeader=true, nested=false)}"></div>
+					</th:block>
+				</div>
+			</th:block>
+		</th:block>
+
+		<th:block th:if="${analyzePage != null and !analyzePage.esgSections().isEmpty()}">
+			<div class="block analytic-section-group analytic-section-group--esg">
+				<div th:replace="~{fragments/analyze-section :: esgAnalyzeBlock(esgSections=${analyzePage.esgSections()})}"></div>
+			</div>
+		</th:block>
+
+		<p th:if="${analyzePage == null or (analyzePage.sections().isEmpty() and analyzePage.esgSections().isEmpty())}">Нет рассчитанных показателей</p>
+
+		<section class="block analytic-summary"
+		         th:if="${analyzePage != null and !analyzePage.summaryRows().isEmpty()}">
+			<h2 class="name">Сводная таблица показателей</h2>
+			<div th:replace="~{fragments/analyze-section :: summaryTable(
+					periodLabels=${analyzePage.sections().get(0).periodLabels()},
+					rows=${analyzePage.summaryRows()})}"></div>
+		</section>
+
+		<section class="block analytic-comment">
+			<h2 class="name">Комментарий аналитика</h2>
+			<form class="comments-form" method="post" th:action="@{/reports/{id}/analytic(id=${report.id()})}">
+				<input th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"
+				       type="hidden">
+				<textarea class="comments-form__field" name="comment" placeholder="Введите комментарий"
+				          th:text="${analyzePage != null ? analyzePage.analystComment() : ''}"></textarea>
+				<div class="button">
+					<button class="button data" th:if="${canSaveComment}" type="submit">Сохранить</button>
+				</div>
+			</form>
+		</section>
+	</main>
+
+	<script th:src="@{/js/vendor/chart.umd.min.js}"></script>
+	<script th:src="@{/js/vendor/chartjs-plugin-datalabels.min.js}"></script>
+	<script th:src="@{/js/print/print-charts.js}"></script>
+</body>
+</html>

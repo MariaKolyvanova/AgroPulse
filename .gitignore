@@ -31,3 +31,19 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### macOS ###
+.DS_Store
+**/.DS_Store
+.pptx_extract/
+
+### Logs ###
+*.log
+logs/
+
+### Local / secrets ###
+.env
+.env.*
+application-local.properties
+application-local.yml
+application-local.yaml

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Отчёт</title>
+	<link href="/images/icon.svg" rel="icon" type="image/svg+xml">
+	<link href="/images/icon.ico" rel="alternate icon">
+	<link rel="stylesheet" th:href="@{/css/styles.css}">
+	<link rel="stylesheet" th:href="@{/css/menu.css}">
+	<link rel="stylesheet" th:href="@{/css/reports/report.css}">
+</head>
+<body>
+	<section class="menu" th:insert="~{fragments/menu :: menu}"></section>
+	<main class="content">
+		<div th:replace="~{fragments/back :: back}"></div>
+		<h1 class="name">Отчёт</h1>
+		
+		<section class="report block">
+			<div class="label-left">
+				<div class="label">
+					<span class="label">Название отчёта</span>
+					<span class="value" th:text="${report.reportName()}"></span>
+					
+					<span class="label">Период</span>
+					<div class="value-period">
+						<span class="value"
+						      th:text="${report.reportMonth() != null ? report.reportMonth().getName() : ''}"></span>
+						<span class="value" th:text="${report.reportYear()}"></span>
+					</div>
+					
+					<span class="label">Статус</span>
+					<span class="value" th:text="${report.status().label}"></span>
+				</div>
+			</div>
+			
+			<div class="label-right">
+				<div class="label">
+					<span class="label">Название документа</span>
+					<span class="value" th:text="${report.originalFilename()}"></span>
+					
+					<span class="label">Дата создания</span>
+					<span class="value"
+					      th:text="${#temporals.format(report.createdAt(), 'HH:mm dd.MM.yyyy')}"></span>
+					
+					<span class="label">Дата последнего изменения</span>
+					<span class="value"
+					      th:text="${#temporals.format(report.updatedAt(), 'HH:mm dd.MM.yyyy')}"></span>
+				</div>
+			</div>
+			
+		</section>
+		
+		<div class="report-actions">
+			<a class="button data" sec:authorize="hasAuthority('OPERATOR')"
+			   th:href="@{'/reports/' + ${report.id()} + '/data'}"
+			   th:if="${reportActions.prepare()}"
+			   type="button">Проверить данные</a>
+			<form method="post" sec:authorize="hasAuthority('OPERATOR')"
+			      th:action="@{/reports/{id}/approve-for-analysis(id=${report.id()})}"
+			      th:if="${reportActions.approveForAnalysis()}">
+				<input th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"
+				       type="hidden"/>
+				<button class="button" type="submit">Утвердить к анализу</button>
+			</form>
+			<form method="post" sec:authorize="hasAuthority('ANALYTIC')"
+			      th:action="@{/reports/{id}/calculate(id=${report.id()})}"
+			      th:if="${reportActions.calculate()}">
+				<input th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"
+				       type="hidden"/>
+				<button class="button" type="submit">Рассчитать</button>
+			</form>
+			<form method="post" sec:authorize="hasAuthority('ANALYTIC')"
+			      th:action="@{/reports/{id}/approve(id=${report.id()})}"
+			      th:if="${reportActions.approve()}">
+				<input th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"
+				       type="hidden"/>
+				<button class="button" type="submit">Одобрить</button>
+			</form>
+			<a class="button" sec:authorize="hasAuthority('ANALYTIC')"
+			   th:href="@{'/reports/' + ${report.id()} + '/analytic'}"
+			   th:if="${reportActions.analysis()}"
+			   type="button">Анализ</a>
+			<a class="button" sec:authorize="hasAuthority('ANALYTIC')"
+			   th:href="@{'/reports/' + ${report.id()} + '/export'}"
+			   th:if="${reportActions.exportPdf()}"
+			   type="button">Экспорт в PDF</a>
+			<form method="post" onsubmit="return confirm('Вы уверены, что хотите удалить отчёт?');"
+			      th:action="@{/reports/{id}/delete(id=${report.id()})}">
+				<input th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"
+				       type="hidden"/>
+				<button class="button delete" type="submit">Удалить отчёт</button>
+			</form>
+		</div>
+		
+	
+		<h2 class="name">История изменений</h2>
+		
+		<section class="audit">
+			<table>
+				<thead>
+				<tr>
+					<th class="column-3">Сотрудник</th>
+					<th class="column-3">Статус</th>
+					<th class="column-3">Дата</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr th:each="audit : ${audits}">
+					<td th:text="${audit.fullName()}"></td>
+					<td th:text="${audit.status().label}"></td>
+					<td th:text="${#temporals.format(audit.date(), 'yyyy-MM-dd HH:mm')}"></td>
+				</tr>
+				</tbody>
+			</table>
+		</section>
+	</main>
+</body>
+</html>

@@ -13,7 +13,7 @@
 <body>
 	<section class="menu" th:insert="~{fragments/menu :: menu}"></section>
 	<main class="content">
-		
+		<div th:replace="~{fragments/back :: back}"></div>
 		<h1 class="name">Новый сотрудник</h1>
 		<form method="post" th:action="@{/users/create}">
 			<section class="user block">

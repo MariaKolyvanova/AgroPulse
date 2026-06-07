@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<body>
+<section th:fragment="esg-form">
+	<div class="form-messages" th:if="${esgError != null}">
+		<p class="error-message" th:text="${esgError}"></p>
+	</div>
+
+	<section class="cards">
+		<section class="block card" th:each="section : ${esgPage.sections()}">
+			<div class="card-name">
+				<img alt="" class="card-img"
+				     th:src="@{${section.categoryName() == 'Экология' ? '/images/esg/environmental.svg'
+				             : (section.categoryName() == 'Социальные показатели' ? '/images/esg/social.svg'
+				             : '/images/esg/governance.svg')}}">
+				<h3 class="name-card" th:text="${section.categoryName()}"></h3>
+			</div>
+
+			<input name="indicatorId"
+			       th:each="row : ${section.rows()}"
+			       th:value="${row.indicatorId()}"
+			       type="hidden">
+
+			<div class="indicators">
+				<div class="indicator" th:each="row : ${section.rows()}">
+					<div class="esg-title">
+						<span class="esg-name" th:text="${row.indicatorName()}"></span>
+					</div>
+
+					<input class="esg"
+					       min="0"
+					       name="value"
+					       step="any"
+					       th:value="${row.value()}"
+					       type="number">
+				</div>
+			</div>
+		</section>
+	</section>
+
+	<div class="button esg-actions" th:if="${canSaveEsg and not #lists.isEmpty(esgPage.sections())}">
+		<button class="button data" type="submit">Сохранить</button>
+	</div>
+</section>
+</body>
+</html>

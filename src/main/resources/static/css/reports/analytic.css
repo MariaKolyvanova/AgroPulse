@@ -1,0 +1,256 @@
+h2.name {
+    margin-bottom: 30px;
+}
+
+div.button {
+    margin: 0;
+}
+
+.analytic-comment {
+    margin-bottom: 64px;
+}
+
+.analytic-summary {
+    margin-bottom: 64px;
+}
+
+.content.analytic .print-summary-table {
+    font-size: 0.9rem;
+}
+
+.content.analytic .print-summary-table th,
+.content.analytic .print-summary-table td {
+    padding: 10px 12px;
+}
+
+
+
+.analytic-section-group {
+    margin-bottom: 64px;
+}
+
+.content.analytic .print-section-group .print-section__heading {
+    margin: 0 0 24px;
+}
+
+.content.analytic .print-section__chart-row {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
+.content.analytic .print-section__chart-col {
+    flex: 1 1 calc(50% - 12px);
+    min-width: calc(50% - 12px);
+    max-width: calc(50% - 12px);
+    box-sizing: border-box;
+}
+
+.content.analytic .print-section__split-heading {
+    margin: 0 0 12px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.35;
+    text-align: center;
+}
+
+.content.analytic .print-section__split-unit {
+    margin: 0 0 12px;
+    font-size: 0.9rem;
+    text-align: center;
+    color: #6B7280;
+}
+
+.content.analytic .print-section__chart-row .print-chart {
+    max-width: none;
+    margin-bottom: 24px;
+}
+
+.content.analytic .print-section--split-panel .print-chart,
+.content.analytic .print-section--split-panel .print-section__chart-canvas {
+    min-height: calc(280px / 3);
+}
+
+.content.analytic .print-section--split-panel {
+    box-sizing: border-box;
+    border: 1px solid var(--color-border);
+    border-radius: 30px;
+    padding: 16px;
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
+
+.content.analytic .print-section--split-panel .print-indicator-card {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.content.analytic .print-section--split-panel .print-indicator-card__header {
+    display: none;
+}
+
+.analytic-section-group .print-section--nested,
+.analytic-section-group .print-section + .print-section {
+    margin-top: 40px;
+}
+
+.content.analytic .print-section__title-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 8px;
+}
+
+.content.analytic .print-section__title-row .print-section__heading {
+    margin: 0;
+}
+
+.content.analytic .print-section__unit {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    white-space: nowrap;
+    color: #6B7280;
+}
+
+.content.analytic .print-section__heading {
+    margin: 0 0 8px;
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+.content.analytic .print-section__heading--nested {
+    font-size: 1.35rem;
+}
+
+.content.analytic .print-esg-block__title {
+    margin: 0 0 32px;
+}
+
+.content.analytic .print-section__heading--esg-category {
+    margin: 0 0 40px;
+    font-size: 1.75rem;
+    font-weight: 400;
+}
+
+.content.analytic .print-esg-category + .print-esg-category {
+    margin-top: 48px;
+}
+
+.content.analytic .print-section__subtitle {
+    margin: 0 0 24px;
+    font-size: 0.95rem;
+}
+
+.content.analytic .print-section__chart-title {
+    margin: 30px 0 0 0;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.content.analytic .print-chart {
+    min-height: 280px;
+    max-width: 900px;
+    margin-bottom: 40px;
+}
+
+.content.analytic .print-section__chart-canvas {
+    min-height: 280px;
+    height: auto !important;
+}
+
+.content.analytic .print-indicator-cards {
+    gap: 28px;
+}
+
+.content.analytic .print-indicator-card {
+    padding-bottom: 28px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.content.analytic .print-indicator-card__header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.content.analytic .print-indicator-card__marker {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.content.analytic .print-indicator-card__title {
+    margin: 0;
+    font-size: 1.05rem;
+}
+
+.content.analytic .print-section__chart-title {
+    text-align: center;
+}
+
+.content.analytic .print-indicator-card__normal {
+    margin-left: 1em;
+    color: #6B7280;
+    font-weight: 500;
+}
+
+.content.analytic .print-indicator-card__values,
+.content.analytic .print-indicator-card__conclusion,
+.content.analytic .print-indicator-card__recommendation {
+    font-size: inherit;
+}
+
+.content.analytic .print-indicator-card__recommendation {
+    padding: 14px 16px;
+    border-radius: 10px;
+    gap: 12px;
+}
+
+.content.analytic .print-indicator-card__recommendation--positive {
+    border: 1px solid #bbf7d0;
+}
+
+.content.analytic .print-indicator-card__recommendation--warning {
+    border: 1px solid #fed7aa;
+}
+
+.content.analytic .print-indicator-card__recommendation--critical {
+    border: 1px solid #fecaca;
+}
+
+.content.analytic .print-indicator-card__recommendation--neutral {
+    border: 1px solid #e2e8f0;
+}
+
+.content.analytic .print-indicator-card__recommendation-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.comments-form {
+    position: relative;
+}
+
+.comments-form__field {
+    display: block;
+    width: 100%;
+    min-height: 120px;
+    margin-bottom: 30px;
+    padding: 15px;
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    font-family: inherit;
+    font-size: var(--text-body-size);
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+.comments-form button.data {
+    position: absolute;
+    right: 0;
+}

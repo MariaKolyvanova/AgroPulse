@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Подготовить отчёт</title>
+	<link href="/images/icon.svg" rel="icon" type="image/svg+xml">
+	<link href="/images/icon.ico" rel="alternate icon">
+	<link rel="stylesheet" th:href="@{/css/styles.css}">
+	<link rel="stylesheet" th:href="@{/css/menu.css}">
+	<link rel="stylesheet" th:href="@{/css/reports/data.css}">
+</head>
+<body>
+	<section class="menu" th:insert="~{fragments/menu :: menu}"></section>
+	<main class="content">
+		<div th:replace="~{fragments/back :: back}"></div>
+		<h1 class="name">Данные отчёта</h1>
+		
+		<h2 class="name">Показатели из загруженного документа</h2>
+		
+		<section>
+			<table>
+				<thead>
+				<tr>
+					<th class="column-4-1">Показатель</th>
+					<th class="column-4-2">Значение позапрошлого периода, тыс. р.</th>
+					<th class="column-4-2">Значение прошлого периода, тыс. р.</th>
+					<th class="column-4-2">Текущее значение, тыс. р.</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr th:each="indicator : ${indicators}">
+					<td th:text="${indicator.name()}"></td>
+					<td th:text="${indicator.twoPeriodsAgoValue() != null ? @ruNumbers.format(indicator.twoPeriodsAgoValue()) : '—'}"></td>
+					<td th:text="${indicator.previousPeriodValue() != null ? @ruNumbers.format(indicator.previousPeriodValue()) : '—'}"></td>
+					<td th:text="${indicator.currentValue() != null ? @ruNumbers.format(indicator.currentValue()) : '—'}"></td>
+				</tr>
+				</tbody>
+			</table>
+		</section>
+		
+		<div th:if="${warning != null
+                        and (not #lists.isEmpty(warning.missingReportIndicators())
+                        or not #lists.isEmpty(warning.missingAnalyzeIndicators()))}">
+			
+			
+			<section class="block warning">
+				
+				<img alt="" class="warning" src="/images/warning.svg">
+				<div class="description">
+					
+					<h2 class="warning">Не все показатели доступны</h2>
+					<span class="warning">Часть данных из загруженного документа отсутствует — расчёт финансового
+					                     анализа
+					       ограничен</span>
+				</div>
+			
+			</section>
+			
+			<div class="warning-cards">
+				<div class="block warning-ind">
+					<div class="card-name">
+						<img alt="" class="warning-ind" src="/images/report.svg">
+						<h3 class="name-card">Отсутствуют показатели отчетности</h3>
+					
+					</div>
+					<ol class="warning">
+						<li class="warning"
+						    th:each="indicator : ${warning.missingReportIndicators()}"
+						    th:text="${indicator}"></li>
+					</ol>
+				</div>
+				
+				<div class="block warning-ind">
+					<div class="card-name">
+						<img alt="" class="warning-ind" src="/images/analyze.svg">
+						<h3 class="name-card">Недоступны для расчета</h3>
+					</div>
+					<ol class="warning">
+						<li class="warning"
+						    th:each="indicator : ${warning.missingAnalyzeIndicators()}"
+						    th:text="${indicator}"></li>
+					</ol>
+				</div>
+			</div>
+			
+		</div>
+
+		<div class="replace-xml-block" th:if="${canReplaceXml}">
+			<div class="form-messages" th:if="${replaceXmlError != null}">
+				<p class="error-message" th:if="${replaceXmlError != null}" th:text="${replaceXmlError}"></p>
+			</div>
+			<form class="replace-xml-form" enctype="multipart/form-data" method="post"
+			      th:action="@{/reports/{id}/replace-xml(id=${reportId})}">
+				<input th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"
+				       type="hidden"/>
+				<input accept=".xml,application/xml,text/xml"
+				       class="replace-xml-input"
+				       id="replaceXmlFile"
+				       name="file"
+				       onchange="this.form.submit()"
+				       type="file">
+				<label class="button replace-xml" for="replaceXmlFile">Добавить документ</label>
+			</form>
+		</div>
+
+	</main>
+</body>
+</html>

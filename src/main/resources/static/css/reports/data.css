@@ -1,0 +1,224 @@
+
+.form-messages {
+    margin: 0 0 24px 0;
+}
+
+.error-message {
+    color: var(--color-red);
+    margin: 0 0 8px 0;
+}
+
+
+h2 {
+    margin: 60px 0 30px 0;
+}
+
+section.cards {
+    display: flex;
+    justify-content: space-between;
+}
+
+section.card {
+    display: block;
+    width: 310px;
+    padding: 30px 30px 15px 30px;
+}
+
+div.card-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+img.card-img {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+}
+
+h3.name.esg-category {
+    margin: 0 0 16px 0;
+    font-size: var(--text-body-size);
+    font-weight: 600;
+}
+
+span.value, input.value, select.value {
+    display: block;
+    margin-bottom: 10px;
+    line-height: 30px;
+    width: 200px;
+    padding: 0 5px;
+    font-size: var(--text-body-size);
+    font-weight: 400;
+}
+
+div.indicators {
+    display: block;
+}
+
+div.indicator {
+    margin-bottom: 25px;
+}
+
+span.esg {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.esg-title {
+    margin-bottom: 5px;
+    line-height: 22px;
+}
+
+span.esg-name {
+    display: inline;
+}
+
+input {
+    height: 30px;
+    border-radius: 30px;
+    border: 1px solid var(--color-border);
+    padding: 15px;
+    width: 240px;
+    display: block;
+}
+
+button.data {
+    position: absolute;
+    right: 0;
+}
+
+img.warning {
+    height: 60px;
+    width: 60px;
+    margin-right: 30px;
+}
+
+h2.warning{
+    margin: 0;
+}
+
+section.warning {
+    display: flex;
+    border-left: 15px solid #FDE047;
+    padding: 30px;
+    margin: 60px 0 30px 0;
+}
+
+ol.warning {
+    margin: 10px 0 20px 0;
+}
+
+li.warning {
+    width: 400px;
+    margin: 0 0 10px 20px;
+}
+
+div.warning-cards {
+    display: flex;
+    justify-content: space-between;
+}
+
+.replace-xml-block {
+    display: flex;
+    justify-content: flex-end;
+    margin: 30px 0 0 0;
+}
+
+.replace-xml-form {
+    display: inline-block;
+}
+
+.replace-xml-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+}
+
+label.button.replace-xml {
+    display: block;
+    cursor: pointer;
+}
+
+div.warning-ind {
+    display: block;
+    gap: 30px;
+    width: 470px;
+    padding: 30px;
+}
+
+h3.name-card {
+    font-size: 18px;
+}
+
+span.warning {
+    color: var(--color-secondary-text);
+    line-height: 30px;
+}
+
+div.name-warning {
+    display: flex;
+}
+
+img.warning-ind {
+    height: 60px;
+    width: 60px;
+}
+
+.esg-description {
+    color: var(--color-secondary-text);
+    margin: 0 0 24px 0;
+    line-height: 30px;
+}
+
+.esg-year-form {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 0 0 16px 0;
+}
+
+.esg-year-label {
+    font-weight: 600;
+}
+
+select.esg-year-select {
+    height: 30px;
+    border-radius: 30px;
+    border: 1px solid var(--color-border);
+    padding: 0 15px;
+    width: 120px;
+}
+
+span.esg-meta {
+    display: block;
+    color: var(--color-secondary-text);
+    font-size: 14px;
+    line-height: 22px;
+    margin-bottom: 8px;
+}
+
+label.esg-period {
+    display: block;
+    margin-bottom: 8px;
+}
+
+span.esg-period-label {
+    display: block;
+    color: var(--color-secondary-text);
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+input.esg-current {
+    border-color: var(--color-primary, var(--color-border));
+}
+
+div.button.esg-actions {
+    position: relative;
+    margin-top: 30px;
+    min-height: 40px;
+}

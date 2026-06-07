@@ -23,9 +23,6 @@ spring:
   mvc:
     format:
       date: iso
-    view:
-      prefix: /WEB-INF/jsp/
-      suffix: .jsp
 
 logging:
   level:
@@ -35,3 +32,10 @@ logging:
 app:
   reports:
     upload-dir: ${java.io.tmpdir}/agropulse/reports
+
+agropulse:
+  print:
+    base-url: http://localhost:8080
+    timeout-seconds: 180
+    device-scale-factor: 4
+    chart-device-pixel-ratio: 4

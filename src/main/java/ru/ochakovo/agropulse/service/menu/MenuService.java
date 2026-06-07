@@ -14,13 +14,11 @@ public class MenuService {
                 new MenuItem("ADMINISTRATOR", "reports", "/reports", "Отчёты"),
                 new MenuItem("ADMINISTRATOR", "audit", "/audit", "Журнал аудита"),
 
-                new MenuItem("OPERATOR", "create", "/reports/create", "Создание"),
+                new MenuItem("OPERATOR", "create", "/reports/create", "Создать отчёт"),
                 new MenuItem("OPERATOR", "reports", "/reports", "Отчёты"),
+                new MenuItem("OPERATOR", "esg", "/esg", "ESG-показатели"),
 
-                new MenuItem("ANALYTIC", "calculation", "/reports/calculation", "Расчёты"),
-                new MenuItem("ANALYTIC", "analytic", "/reports/analytic", "Аналитика"),
-                new MenuItem("ANALYTIC", "reports", "/reports", "Отчёты"),
-                new MenuItem("ANALYTIC", "export", "/reports/export", "Формирование")
+                new MenuItem("ANALYTIC", "reports", "/reports", "Отчёты")
                                       );
 
         return items.stream()

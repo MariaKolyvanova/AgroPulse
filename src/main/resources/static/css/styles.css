@@ -4,12 +4,13 @@ main.content {
     width: 1000px;
     margin: 60px auto;
     flex-shrink: 0;
+    padding-bottom: 120px;
 }
 
 section.block, div.block {
     background-color: white;
     padding: 60px;
-    border-radius: 10px;
+    border-radius: 30px;
     border: 1px solid var(--color-border);
 }
 
@@ -29,7 +30,6 @@ section.block, div.block {
 
     --text-h1-size: 24px;
     --text-h2-size: 20px;
-    --text-h3-size: 16px;
     --text-body-size: 16px;
     --text-secondary-size: 16px;
     --text-input: 16px;
@@ -76,11 +76,6 @@ h2 {
     color: black;
 }
 
-h3 {
-    font-size: var(--text-h3-size);
-    font-weight: 400;
-    color: black;
-}
 
 body, p {
     font-size: var(--text-body-size);
@@ -95,8 +90,24 @@ body, p {
 }
 
 
+a.back-link {
+    display: inline-block;
+    margin-bottom: 24px;
+    color: var(--color-secondary-text);
+    font-size: var(--text-body-size);
+    font-weight: 500;
+}
+
+a.back-link:hover {
+    color: var(--color-primary);
+}
+
 h1.name {
     margin-bottom: 60px;
+}
+
+main.content:has(.back-link) h1.name {
+    margin-top: 0;
 }
 
 table {
@@ -130,6 +141,15 @@ td {
     text-overflow: ellipsis;
 }
 
+
+.column-2-1 {
+    width: 700px;
+}
+
+.column-2-2 {
+    width: 300px;
+}
+
 .column-3 {
     width: 333px;
 }
@@ -138,8 +158,25 @@ td {
     width: 250px;
 }
 
+.column-4-1 {
+    width: 400px;
+}
+
+.column-4-2 {
+    width: 200px;
+}
+
 .column-5 {
     width: 200px;
+}
+
+.column-5-1 {
+    width: 400px;
+    white-space: normal;
+}
+
+.column-5-2 {
+    width: 150px;
 }
 
 .column-6 {
@@ -164,12 +201,17 @@ a.link:hover {
     color: var(--color-primary);
 }
 
-.button {
+div.button {
+    margin: 30px 0 60px 0;
+    height: 50px;
+}
+
+a.button, button.button, label.button {
     display: block;
     text-align: center;
     color: white;
     background-color: var(--color-primary);
-    border-radius: 10px;
+    border-radius: 30px;
     font-size: 18px;
     border: none;
     width: 250px;
@@ -177,7 +219,7 @@ a.link:hover {
     line-height: 50px;
 }
 
-.button:hover{
+a.button:hover, button.button:hover, label.button:hover{
     opacity: 0.8;
     transition: 0.3s;
     cursor: pointer;
@@ -194,3 +236,4 @@ select.placeholder {
 select.placeholder:valid{
     color: black;
 }
+

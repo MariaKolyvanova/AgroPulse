@@ -1,0 +1,52 @@
+section.report {
+    display: inline-flex;
+    width: 100%;
+}
+
+div.label {
+    display: inline;
+}
+
+span.label {
+    display: block;
+    color: var(--color-secondary-text);
+    line-height: 30px;
+}
+
+span.value {
+    display: block;
+    margin-bottom: 20px;
+    line-height: 30px;
+    width: 410px;
+    font-size: var(--text-body-size);
+    font-weight: 400;
+}
+
+div.value-period span.value{
+    display: inline-block;
+    width: auto;
+    padding: 0;
+}
+
+h2 {
+    margin: 60px 0 30px 0;
+}
+
+div.label-left, div.label-right{
+    display: inline-flex;
+}
+
+div.report-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 30px;
+}
+
+button.button.delete {
+    background-color: var(--color-red);
+}
+
+h2.margin-button {
+    margin-top: 120px;
+}

@@ -13,7 +13,9 @@ import ru.ochakovo.agropulse.entity.organization.Company;
 import ru.ochakovo.agropulse.entity.organization.User;
 import ru.ochakovo.agropulse.mapper.audit.AuthAuditReadMapper;
 import ru.ochakovo.agropulse.querydsl.QPredicates;
-import ru.ochakovo.agropulse.repository.AuthAuditRepository;
+import ru.ochakovo.agropulse.repository.audit.AuthAuditRepository;
+import ru.ochakovo.agropulse.security.CustomUserDetails;
+import ru.ochakovo.agropulse.util.AuditSorting;
 
 import java.time.LocalDateTime;
 
@@ -39,10 +41,13 @@ public class AuthAuditService {
     }
 
     public Page<AuthAuditReadDto> findAll(AuthAuditFilter filter, Pageable pageable) {
+        Long companyId = CustomUserDetails.requireCurrent().getCompanyId();
+     
         var normalizedIp = StringUtils.hasText(filter.ip()) ? filter.ip().trim() : null;
         var normalizedFullName = StringUtils.hasText(filter.fullName()) ? filter.fullName().trim() : null;
 
         var predicate = QPredicates.builder()
+                .add(companyId, authAudit.company.id::eq)
                 .add(normalizedIp, authAudit.ip::containsIgnoreCase)
                 .add(filter.from(), from ->
                         authAudit.authAt.goe(from.atStartOfDay()))
@@ -58,6 +63,7 @@ public class AuthAuditService {
                     )
                 .build();
 
-        return authAuditRepository.findAll(predicate, pageable).map(authAuditReadMapper::map);
+        return authAuditRepository.findAll(predicate, AuditSorting.byDateDesc(pageable, "authAt"))
+                .map(authAuditReadMapper::map);
     }
 }

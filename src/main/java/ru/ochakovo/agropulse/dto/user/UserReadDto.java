@@ -8,7 +8,6 @@ public record UserReadDto (
         Role role,
         Long companyId,
         String username,
-        String password,
         String lastName,
         String firstName,
         String patronymic,

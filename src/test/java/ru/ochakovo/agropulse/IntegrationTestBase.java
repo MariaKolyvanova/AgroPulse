@@ -9,7 +9,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
 @AutoConfigureMockMvc
-@Sql("classpath:sql/data.sql")
+@Sql("classpath:db/seed/demo-data.sql")
 @WithMockUser(username = "admin@ochakovo.ru", password = "123", authorities = {"ADMINISTRATOR", "OPERATOR", "ANALYTIC"})
 public abstract class IntegrationTestBase {
 
